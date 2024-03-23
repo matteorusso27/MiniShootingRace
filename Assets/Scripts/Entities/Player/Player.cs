@@ -1,15 +1,39 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class Player : PlayerBase
+public class Player : CharacterBase
 {
-    void Start()
+    private bool canMove;
+    private void Awake() => GameManager.OnBeforeStateChanged += OnStateChanged;
+    private void OnDestroy() => GameManager.OnAfterStateChanged -= OnStateChanged;
+
+    private void OnStateChanged(GameManager.GameState newState)
     {
-        //play sound
+        if (newState == GameManager.GameState.PlayerTurn)
+            canMove = true;
+        else
+            canMove = false;
     }
-    public override void ExecuteMove()
+
+    private void OnMouseDown()
     {
-        base.ExecuteMove();
+        if (GameManager.Instance.State != GameManager.GameState.PlayerTurn) return;
+        if (!canMove)
+        {
+            Debug.Log("you cannot move");
+            return;
+        }
+
+        Debug.Log("Clicked");
+    }
+    public virtual void ExecuteMove()
+    {
+        canMove = false;
+    }
+
+    public void Update()
+    {
+        if (!canMove) return;
     }
 }

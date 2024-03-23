@@ -11,6 +11,8 @@ public class ScriptableBallBase: ScriptableObject
     
     public enum BallType
     {
-        NormalBall
+        NormalBall,
+        FireBall,
+        BlueBall
     }
 }

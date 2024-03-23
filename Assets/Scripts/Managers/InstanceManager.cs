@@ -6,9 +6,7 @@ public class InstanceManager : Singleton<InstanceManager>
 {
     public void SpawnPlayerAndBall()
     {
-        var characterPosition = new Vector3(1, 0, 0);
-
-        SpawnPlayer(EntityType.Player, characterPosition);
+        SpawnPlayer(EntityType.Player);
         SpawnBall(BallType.NormalBall);
     }
 
@@ -18,12 +16,12 @@ public class InstanceManager : Singleton<InstanceManager>
         var ballScriptable = ResourceSystem.Instance.GetBalls(ballType);
         var toSpawn = Instantiate(ballScriptable.prefab, ballPosition, Quaternion.identity);
     }
-    //spawn ball..
 
-    private void SpawnPlayer(EntityType player, Vector3 vector3)
+    private void SpawnPlayer(EntityType player)
     {
+        var characterPosition = new Vector3(1, 0, 0);
         var characterScriptable = ResourceSystem.Instance.GetCharacters(player);
-        var toSpawn = Instantiate(characterScriptable.prefab, vector3, Quaternion.identity);
+        var toSpawn = Instantiate(characterScriptable.prefab, characterPosition, Quaternion.identity);
         var stats = characterScriptable.BaseStats;
         stats.Score = 0;
         toSpawn.SetStats(stats);
