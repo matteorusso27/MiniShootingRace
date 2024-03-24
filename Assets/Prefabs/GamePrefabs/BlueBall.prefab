@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6466000097865428231}
   - component: {fileID: 6374074910453525064}
   - component: {fileID: 2212935159279561417}
-  - component: {fileID: 3339933537023756282}
+  - component: {fileID: -472390211007322200}
   m_Layer: 0
   m_Name: BlueBall
   m_TagString: Untagged
@@ -98,7 +98,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3339933537023756282
+--- !u!114 &-472390211007322200
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -107,6 +107,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 6114855324382863990}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1594731d1710ba640ba99bb2b80896c2, type: 3}
+  m_Script: {fileID: 11500000, guid: fd3ab44ce28675f448ff500addb3c5ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

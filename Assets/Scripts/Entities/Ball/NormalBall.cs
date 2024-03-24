@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ball : BallBase
+public class NormalBall : BallBase
 {
-    private float gravity;
-
 }
