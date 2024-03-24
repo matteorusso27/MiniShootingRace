@@ -112,7 +112,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialVelocity: 10
   launchAngle: 60
-  initialHeight: 30
-  maxTime: 1
   useParabolicMovement: 1
+  currentPosition: {x: 0, y: 0, z: 0}
+  startingPosition: {x: 0, y: 0, z: 0}
   State: 0
