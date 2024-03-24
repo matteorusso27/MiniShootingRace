@@ -16,7 +16,7 @@ namespace GG.Infrastructure.Utils.Swipe {
         public SwipeListenerEvent OnSwipe;
 
         [SerializeField]
-        private float sensitivity = 75f;
+        private float sensitivity = 10f;
 
         [SerializeField]
         private SwipeDetectionMode _swipeDetectionMode = SwipeDetectionMode.EightSides;
