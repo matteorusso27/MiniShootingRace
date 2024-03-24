@@ -4,13 +4,12 @@ using static Helpers;
 public class BallBase : MonoBehaviour
 {
     // Parameters for parabolic movement
-    public float initialVelocity = 10f;
+    public float initialVelocity = 20f;
     public float launchAngle = 45f;
 
-    public float initialHeight = 10f;
     // Time variables
     private float currentTime = 0f;
-    public float maxTime = 1f; // Maximum time of flight
+    private float maxTime = 3f; // Maximum time of flight
 
     // Reference to the Rigidbody component
     private Rigidbody rb;
@@ -18,14 +17,20 @@ public class BallBase : MonoBehaviour
     // Flag to indicate whether to use parabolic movement or kinematic gravity
     public bool useParabolicMovement = true;
 
+    public Vector3 currentPosition;
+    public Vector3 startingPosition;
     public enum BallState
     {
         Initialized,
-        Ready
+        Ready,
+        Grounded
     }
     public BallState State;
+    private float rotationSpeed = 200f;
+
     public bool IsInitialized => State == BallState.Initialized;
     public bool IsReady => State == BallState.Ready;
+    public bool IsGrounded => State == BallState.Grounded;
 
     public void ChangeState(BallState newState)
     {
@@ -41,6 +46,8 @@ public class BallBase : MonoBehaviour
             rb.isKinematic = true;
             rb.useGravity = false;
         }
+        currentPosition = transform.position;
+        startingPosition = currentPosition;
     }
 
     private void Start()
@@ -50,32 +57,48 @@ public class BallBase : MonoBehaviour
 
     private IEnumerator GoStart()
     {
+        Debug.Log(transform.position);
         yield return new WaitForSeconds(0.5f);
         ChangeState(BallState.Ready);
     }
     private void Update()
     {
         if (!IsReady) return;
+
+        HandleMovement();
+        HandleRotation();
+    }
+
+    private void HandleMovement()
+    {
         if (useParabolicMovement)
         {
             // Increment time
             currentTime += Time.deltaTime;
 
             // Calculate current position using parabolic equation
-            float currentZ = initialVelocity * Mathf.Cos(Mathf.Deg2Rad * launchAngle) * currentTime;
-            float currentY = initialHeight + initialVelocity * Mathf.Sin(Mathf.Deg2Rad * launchAngle) * currentTime - 0.5f * GRAVITY * Mathf.Pow(currentTime, 2);
+            float currentX = currentPosition.x;
+            float currentY = currentPosition.y + initialVelocity * Mathf.Sin(Mathf.Deg2Rad * launchAngle) * currentTime - 0.5f * GRAVITY * Mathf.Pow(currentTime, 2);
+            float currentZ = currentPosition.z + initialVelocity * Mathf.Cos(Mathf.Deg2Rad * launchAngle) * currentTime;
 
             // Update object's position
-            transform.position = new Vector3(0f, currentY, currentZ);
+            transform.position = new Vector3(currentX, currentY, currentZ);
 
             // Check if time exceeds maximum time of flight
             if (currentTime >= maxTime)
             {
                 // Reset time and position
                 currentTime = 0f;
-                transform.position = new Vector3(0f, initialHeight, 0f);
+                //transform.position = startingPosition;
             }
         }
+    }
+    private void HandleRotation()
+    {
+        float rotationAngleX = rotationSpeed * Time.deltaTime;
+
+        // Apply rotation
+        transform.Rotate(rotationAngleX, 0f, 0f);
     }
 
     // Method to toggle between parabolic movement and kinematic gravity
@@ -92,7 +115,14 @@ public class BallBase : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("collision");
+        Debug.Log("trigger collision");
         ToggleMovementMode();
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("enter collision");
+        if (collision.gameObject.CompareTag(StringTag(GameTag.Terrain)))
+            ChangeState(BallState.Grounded);
     }
 }

@@ -12,14 +12,14 @@ public class InstanceManager : Singleton<InstanceManager>
 
     public void SpawnBall(BallType ballType)
     {
-        var ballPosition = new Vector3(1, 1, 0);
+        var ballPosition = new Vector3(1, 9, -3);
         var ballScriptable = ResourceSystem.Instance.GetBalls(ballType);
         var toSpawn = Instantiate(ballScriptable.prefab, ballPosition, Quaternion.identity);
     }
 
     private void SpawnPlayer(EntityType player)
     {
-        var characterPosition = new Vector3(1, 0, 0);
+        var characterPosition = new Vector3(1, 3, 0);
         var characterScriptable = ResourceSystem.Instance.GetCharacters(player);
         var toSpawn = Instantiate(characterScriptable.prefab, characterPosition, Quaternion.identity);
         var stats = characterScriptable.BaseStats;

@@ -110,3 +110,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1594731d1710ba640ba99bb2b80896c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialVelocity: 10
+  launchAngle: 60
+  initialHeight: 30
+  maxTime: 1
+  useParabolicMovement: 1
+  State: 0
