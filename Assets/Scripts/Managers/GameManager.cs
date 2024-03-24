@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 using static Helpers;
 
@@ -64,6 +65,8 @@ public class GameManager : Singleton<GameManager>
         float elapsedTime = 0f;
 
         Coroutine swipeAgainCoroutine = null;
+        var activeBall = InstanceManager.Instance._inGameObjects.Where(go => go.GetComponent<NormalBall>() != null).
+            FirstOrDefault()?.GetComponent<NormalBall>();
         // Continue looping until 2 seconds have passed
         while (elapsedTime < PLAYER_TURN_TIME)
         {
@@ -76,6 +79,12 @@ public class GameManager : Singleton<GameManager>
                 // do things with normalized distance value
                 var n = SwipeManager.Instance.normalizedDistance;
 
+                if (activeBall.IsInitialized || activeBall.IsReady)
+                {
+                    activeBall.Setup();
+                    activeBall.StartParabolic();
+                }
+                
                 // Then start again
                 swipeAgainCoroutine = StartCoroutine(SwipeManager.Instance.CanSwipeAgain());
             }

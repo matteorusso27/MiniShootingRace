@@ -1,9 +1,18 @@
 using UnityEngine;
 using static ScriptableCharacterBase;
 using static ScriptableBallBase;
+using System.Collections;
+using System.Collections.Generic;
 
 public class InstanceManager : Singleton<InstanceManager>
 {
+    public List<GameObject> _inGameObjects;
+
+    public void Start()
+    {
+        _inGameObjects = new List<GameObject>();
+    }
+
     public void SpawnPlayerAndBall()
     {
         SpawnPlayer(EntityType.Player);
@@ -12,9 +21,11 @@ public class InstanceManager : Singleton<InstanceManager>
 
     public void SpawnBall(BallType ballType)
     {
-        var ballPosition = new Vector3(1, 9, -3);
+        Debug.Log("spaen ball");
+        var ballPosition = new Vector3(4, 5, -24);
         var ballScriptable = ResourceSystem.Instance.GetBalls(ballType);
         var toSpawn = Instantiate(ballScriptable.prefab, ballPosition, Quaternion.identity);
+        _inGameObjects.Add(toSpawn.gameObject);
     }
 
     private void SpawnPlayer(EntityType player)
@@ -25,5 +36,6 @@ public class InstanceManager : Singleton<InstanceManager>
         var stats = characterScriptable.BaseStats;
         stats.Score = 0;
         toSpawn.SetStats(stats);
+        _inGameObjects.Add(toSpawn.gameObject);
     }
 }

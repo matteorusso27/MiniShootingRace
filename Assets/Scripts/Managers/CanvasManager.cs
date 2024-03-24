@@ -9,6 +9,7 @@ public class CanvasManager : Singleton<CanvasManager>
     public TMP_Text swipeState;
     public TMP_Text gameState;
     public TMP_Text playerTurnCountDown;
+    public TMP_Text ballState;
 
     public void SetText(string text)
     {
@@ -31,4 +32,5 @@ public class CanvasManager : Singleton<CanvasManager>
     }
 
     public void SetGameState(string t) => gameState.text = t;
+    public void SetBallState(string t) => ballState.text = t;
 }
