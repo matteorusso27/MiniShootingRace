@@ -20,8 +20,8 @@ public class ResourceSystem : Singleton<ResourceSystem>
 
     private void AssembleResources()
     {
-        Characters = Resources.LoadAll<ScriptableCharacterBase>("Characters").ToList();
-        Balls = Resources.LoadAll<ScriptableBallBase>("Balls").ToList();
+        Characters = Resources.LoadAll<ScriptableCharacterBase>("Entities/Characters").ToList();
+        Balls = Resources.LoadAll<ScriptableBallBase>("Entities/Balls").ToList();
         CharactersDict = Characters.ToDictionary(x => x.Player);
         BallsDict = Balls.ToDictionary(x => x.Ball);
     }
