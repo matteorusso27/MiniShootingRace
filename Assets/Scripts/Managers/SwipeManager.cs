@@ -115,6 +115,8 @@ public class SwipeManager : Singleton<SwipeManager>
         CanvasManager.Instance.Canvas.SetText("D: " + normalizedDistance.ToString());
         CanvasManager.Instance.Canvas.SetFillBar(normalizedDistance);
         CanvasManager.Instance.Canvas.SetSwipeStateText(State.ToString());
+        var markerPositionY = CanvasManager.Instance.Canvas.fillBar.rectTransform.rect.height * normalizedDistance;
+        CanvasManager.Instance.Canvas.FillMarker.rectTransform.anchoredPosition = new Vector3(0, markerPositionY, 0);
     }
 
     private void OnDisable()

@@ -11,6 +11,7 @@ public class Canvas : MonoBehaviour
     public TMP_Text gameState;
     public TMP_Text playerTurnCountDown;
     public TMP_Text ballState;
+    public Image    FillMarker;
 
     public void SetText(string text)
     {
