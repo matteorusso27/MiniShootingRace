@@ -1,6 +1,7 @@
 using GG.Infrastructure.Utils.Swipe;
 using System.Collections;
 using UnityEngine;
+using static Helpers;
 
 public class SwipeManager : Singleton<SwipeManager>
 {
@@ -11,8 +12,6 @@ public class SwipeManager : Singleton<SwipeManager>
     public float startingPointY = -1;
     public float normalizedDistance;
     public float maxSwipeDistance;
-
-    private float timeToSwap = 3f;
 
     // State
     public enum SwipeState
@@ -40,15 +39,15 @@ public class SwipeManager : Singleton<SwipeManager>
         screenHeight = Screen.height;
         maxSwipeDistance = screenHeight / 2;
         ChangeSwipeState(SwipeState.WaitForSwipeDetection);
-        Setup();
     }
 
-    private bool CanMeasureSwipe => State == SwipeState.SwipeDetection;
-    private bool SwipeIsMeasured => State == SwipeState.SwipeMeasured;
+    public bool CanMeasureSwipe => State == SwipeState.SwipeDetection;
+    public bool SwipeIsMeasured => State == SwipeState.SwipeMeasured;
 
     public void Setup()
     {
         CanvasManager.Instance.SetFillBar(normalizedDistance);
+        CanvasManager.Instance.SetText(normalizedDistance.ToString());
         ChangeSwipeState(SwipeState.SwipeDetection);
         CanvasManager.Instance.SetSwipeStateText(State.ToString());
     }
@@ -58,7 +57,7 @@ public class SwipeManager : Singleton<SwipeManager>
         if (!CanMeasureSwipe) return;
 
         // Initialize starting point and start swipe detection coroutine
-        if (startingPointY == -1)
+        if (startingPointY == -1) // todo change to delegate that subscribes to first swipe interaction
         {
             startingPointY = swipeListener._swipePoint.y;
             swipeCoroutine = StartCoroutine(CoroutineSwipeDetection());
@@ -99,7 +98,7 @@ public class SwipeManager : Singleton<SwipeManager>
             UpdateUI();
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space)) //todo, remove, debug purposes
             Setup();
     }
 
@@ -128,16 +127,17 @@ public class SwipeManager : Singleton<SwipeManager>
     private IEnumerator CoroutineSwipeDetection()
     {
         // Wait for swipe detection timeout
-        yield return new WaitForSeconds(timeToSwap);
+        yield return new WaitForSeconds(TIME_TO_SWIPE);
 
         // End swipe phase if swipe distance not measured
         if (!SwipeIsMeasured) EndSwipingPhase();
     }
 
-    private IEnumerator CanSwipeAgain()
+    //todo, needed?
+    public IEnumerator CanSwipeAgain()
     {
         // Wait to allow swipe measurement again
-        yield return new WaitForSeconds(1.25f);
-        //canMeasureSwipe = true;
+        yield return new WaitForSeconds(1f);
+        Setup();
     }
 }
