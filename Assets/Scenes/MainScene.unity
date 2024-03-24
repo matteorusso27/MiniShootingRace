@@ -132,7 +132,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 10822200}
-  - component: {fileID: 10822201}
   m_Layer: 0
   m_Name: Canvases
   m_TagString: Untagged
@@ -156,24 +155,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &10822201
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 10822199}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4fb91134fe3fea14dbaff0683d75ff86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tmpPro: {fileID: 1063327919}
-  fillBar: {fileID: 1560593481}
-  swipeState: {fileID: 531664937}
-  gameState: {fileID: 262130166}
-  playerTurnCountDown: {fileID: 85260838}
-  ballState: {fileID: 1507866508}
 --- !u!1 &85260837
 GameObject:
   m_ObjectHideFlags: 0
@@ -1083,6 +1064,7 @@ Transform:
   - {fileID: 1377489196}
   - {fileID: 1324149406}
   - {fileID: 2129529161}
+  - {fileID: 1464933770}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1358,6 +1340,51 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3703bfe8494d134a87abb7e60babc15, type: 3}
+--- !u!1 &1464933769
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1464933770}
+  - component: {fileID: 1464933771}
+  m_Layer: 0
+  m_Name: CanvasManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1464933770
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1464933769}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1216837446}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1464933771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1464933769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fb91134fe3fea14dbaff0683d75ff86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Canvas: {fileID: 1729147220}
 --- !u!1 &1507866507
 GameObject:
   m_ObjectHideFlags: 0
@@ -1679,6 +1706,7 @@ GameObject:
   - component: {fileID: 1729147219}
   - component: {fileID: 1729147218}
   - component: {fileID: 1729147217}
+  - component: {fileID: 1729147220}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1773,6 +1801,24 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1729147220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1729147215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2f78c106c851ec4d8e0e98bc9ff4d27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tmpPro: {fileID: 1063327919}
+  fillBar: {fileID: 1560593481}
+  swipeState: {fileID: 531664937}
+  gameState: {fileID: 262130166}
+  playerTurnCountDown: {fileID: 85260838}
+  ballState: {fileID: 1507866508}
 --- !u!1 &1870614927
 GameObject:
   m_ObjectHideFlags: 0
