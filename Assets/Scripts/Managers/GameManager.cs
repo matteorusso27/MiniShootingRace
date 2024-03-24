@@ -72,13 +72,14 @@ public class GameManager : Singleton<GameManager>
         {
             // Increment the elapsed time by the time passed since the last frame
             elapsedTime += Time.deltaTime;
-            CanvasManager.Instance.SetTime((int)(PLAYER_TURN_TIME - elapsedTime));
+            CanvasManager.Instance.Canvas.SetTime((int)(PLAYER_TURN_TIME - elapsedTime));
 
             if (SwipeManager.Instance.SwipeIsMeasured)
             {
                 // do things with normalized distance value
                 var n = SwipeManager.Instance.normalizedDistance;
-
+                //Debug.Log(n);
+                //if (n <= MIN_SWIPE) continue;
                 if (activeBall.IsInitialized || activeBall.IsReady)
                 {
                     activeBall.Setup();

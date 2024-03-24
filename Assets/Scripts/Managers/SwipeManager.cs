@@ -46,26 +46,27 @@ public class SwipeManager : Singleton<SwipeManager>
 
     public void Setup()
     {
-        CanvasManager.Instance.SetFillBar(normalizedDistance);
-        CanvasManager.Instance.SetText(normalizedDistance.ToString());
+        CanvasManager.Instance.Canvas.SetFillBar(normalizedDistance);
+        CanvasManager.Instance.Canvas.SetText(normalizedDistance.ToString());
         ChangeSwipeState(SwipeState.SwipeDetection);
-        CanvasManager.Instance.SetSwipeStateText(State.ToString());
+        CanvasManager.Instance.Canvas.SetSwipeStateText(State.ToString());
+        normalizedDistance = 0f;
     }
     private void OnSwipe(string swipe)
     {
         // Only process swipe if measurement is allowed
         if (!CanMeasureSwipe) return;
 
+        // Check for downward swipe
+        if (swipe.Equals("Down"))
+        {
+            OnSwipeCancelled();
+        }
         // Initialize starting point and start swipe detection coroutine
         if (startingPointY == -1) // todo change to delegate that subscribes to first swipe interaction
         {
             startingPointY = swipeListener._swipePoint.y;
             swipeCoroutine = StartCoroutine(CoroutineSwipeDetection());
-        }
-        // Check for downward swipe
-        if (swipe.Equals("Down"))
-        {
-            OnSwipeCancelled();
         }
     }
 
@@ -85,8 +86,7 @@ public class SwipeManager : Singleton<SwipeManager>
         startingPointY = -1;
         swipeCoroutine = null; 
         ChangeSwipeState(SwipeState.SwipeMeasured);
-        CanvasManager.Instance.SetSwipeStateText(State.ToString());
-        normalizedDistance = 0f;
+        CanvasManager.Instance.Canvas.SetSwipeStateText(State.ToString());
     }
 
     private void Update()
@@ -112,9 +112,9 @@ public class SwipeManager : Singleton<SwipeManager>
     private void UpdateUI()
     {
         // Update UI with swipe distance
-        CanvasManager.Instance.SetText("D: " + normalizedDistance.ToString());
-        CanvasManager.Instance.SetFillBar(normalizedDistance);
-        CanvasManager.Instance.SetSwipeStateText(State.ToString());
+        CanvasManager.Instance.Canvas.SetText("D: " + normalizedDistance.ToString());
+        CanvasManager.Instance.Canvas.SetFillBar(normalizedDistance);
+        CanvasManager.Instance.Canvas.SetSwipeStateText(State.ToString());
     }
 
     private void OnDisable()

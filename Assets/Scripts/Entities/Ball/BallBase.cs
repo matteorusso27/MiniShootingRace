@@ -77,7 +77,7 @@ public class BallBase : MonoBehaviour
     }
     private void Update()
     {
-        CanvasManager.Instance.SetBallState(State.ToString());
+        CanvasManager.Instance.Canvas.SetBallState(State.ToString());
         if (IsGrounded) return;
 
         HandleMovement();
@@ -93,7 +93,7 @@ public class BallBase : MonoBehaviour
         float verticalVelocity = displacement.y / time;
         float forwardVelocity = displacement.z / time;
 
-        if (displacement.y < 0) verticalVelocity *= -1; 
+        if (displacement.y < 0) verticalVelocity *= -1;
 
         initialVelocity = new Vector3(horizontalVelocity, verticalVelocity + 0.5f * GRAVITY * time, forwardVelocity);
     }
@@ -133,7 +133,7 @@ public class BallBase : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        
+
     }
 
     private void OnCollisionEnter(Collision collision)
