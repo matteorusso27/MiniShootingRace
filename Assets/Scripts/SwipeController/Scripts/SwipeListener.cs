@@ -79,6 +79,9 @@ namespace GG.Infrastructure.Utils.Swipe {
         private void CheckSwipeCancellation() {
             if (Input.GetMouseButtonUp(0))
             {
+                //todo add check minimum swipe required or add it in gamemanager,
+                // otherwise it is always triggered 
+                // use MIN_SWIPE
                 OnSwipeCancelled?.Invoke();
             }
         }
