@@ -37,7 +37,7 @@ public static class Helpers
 
     public static bool IsRegularRange(float value)
     {
-        float tolerance = 0.05f;
+        float tolerance = 0.02f;
         return value >= START_RANGE_PERFECT_SHOOT - tolerance && value <= END_RANGE_PERFECT_SHOOT + tolerance;
     }
 
