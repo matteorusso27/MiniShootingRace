@@ -70,12 +70,7 @@ public class GameManager : Singleton<GameManager>
         Coroutine swipeAgainCoroutine = null;
         var activeBall = InstanceManager.Instance._inGameObjects.Where(go => go.GetComponent<NormalBall>() != null).
             FirstOrDefault()?.GetComponent<NormalBall>();
-        CalculateRanges(difficulty: 6);
-        var startingPerfectRangePositionY = CanvasManager.Instance.Canvas.fillBar.rectTransform.rect.height * START_RANGE_PERFECT_SHOOT;
-        CanvasManager.Instance.Canvas.PerfectRange.rectTransform.anchoredPosition = new Vector3(0, startingPerfectRangePositionY, 0);
-
-        var startingBoardRangePositionY = CanvasManager.Instance.Canvas.fillBar.rectTransform.rect.height * START_RANGE_BOARD_SHOOT;
-        CanvasManager.Instance.Canvas.BoardRange.rectTransform.anchoredPosition = new Vector3(0, startingBoardRangePositionY, 0);
+        CanvasManager.Instance.SetupFillBar();
         activeBall.OnScoreUpdate += OnScoreUpdated;
         float elapsedTime = 0f;
         while (elapsedTime < PLAYER_TURN_TIME)
@@ -99,8 +94,7 @@ public class GameManager : Singleton<GameManager>
                 // Then start again
                 swipeAgainCoroutine = StartCoroutine(SwipeManager.Instance.CanSwipeAgain());
             }
-            // Wait for the next frame
-            yield return null;
+            yield return new WaitForEndOfFrame();
         }
         swipeAgainCoroutine = null;
         // Go to next state
@@ -124,11 +118,9 @@ public class GameManager : Singleton<GameManager>
         End = 3
     }
 
-    public void OnScoreUpdated(int score)
+    public void OnScoreUpdated()
     {
-        Debug.Log("Score: " + currentScore);
-        Debug.Log("New Score: " + (currentScore + score));
-        Debug.Log("-------------------------------------");
+        var score = GetScore(currentShoot);
         currentScore += score;
         CanvasManager.Instance.Canvas.SetScore(currentScore);
     }

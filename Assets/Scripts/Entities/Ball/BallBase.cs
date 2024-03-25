@@ -18,7 +18,7 @@ public class BallBase : MonoBehaviour
     // For score updates
     private int encounteredTriggers = 0;
 
-    public delegate void ScoreUpdateEventHandler(int score);
+    public delegate void ScoreUpdateEventHandler();
     public event ScoreUpdateEventHandler OnScoreUpdate;
     public enum BallState
     {
@@ -71,7 +71,6 @@ public class BallBase : MonoBehaviour
     public void Setup()
     {
         currentTime = 0f;
-        encounteredTriggers = 0;
         transform.position = startingPosition;
         ChangeState(BallState.Ready);
     }
@@ -171,7 +170,7 @@ public class BallBase : MonoBehaviour
             if (encounteredTriggers == 2)
             {
                 Debug.Log("update score encountered");
-                OnScoreUpdate?.Invoke(2);
+                OnScoreUpdate?.Invoke();
                 encounteredTriggers = 0;
             }
         }

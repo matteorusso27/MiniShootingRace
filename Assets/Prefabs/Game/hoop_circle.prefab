@@ -145,7 +145,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1404461178168569077}
-  - component: {fileID: 2653321210982523728}
   m_Layer: 0
   m_Name: hoop_circle
   m_TagString: Untagged
@@ -171,14 +170,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &2653321210982523728
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1744712388959024719}
-  m_Mesh: {fileID: -8803937527578110353, guid: df6000eb8894a1449870f6b2ee64fdf4, type: 3}
 --- !u!1 &2638023406812653675
 GameObject:
   m_ObjectHideFlags: 0
