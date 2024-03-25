@@ -12,6 +12,7 @@ public class Canvas : MonoBehaviour
     public TMP_Text playerTurnCountDown;
     public TMP_Text ballState;
     public Image    FillMarker;
+    public Image    PerfectRange;
 
     public void SetText(string text)
     {

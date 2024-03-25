@@ -61,13 +61,15 @@ public class GameManager : Singleton<GameManager>
     private IEnumerator HandlePlayerTurn()
     {
         SwipeManager.Instance.Setup();
-      
-        float elapsedTime = 0f;
 
         Coroutine swipeAgainCoroutine = null;
         var activeBall = InstanceManager.Instance._inGameObjects.Where(go => go.GetComponent<NormalBall>() != null).
             FirstOrDefault()?.GetComponent<NormalBall>();
-        // Continue looping until 2 seconds have passed
+        CalculatePerfectRange(difficulty: 4);
+        var startingPerfectRangePositionY = CanvasManager.Instance.Canvas.fillBar.rectTransform.rect.height * START_RANGE_PERFECT_SHOOT;
+        CanvasManager.Instance.Canvas.PerfectRange.rectTransform.anchoredPosition = new Vector3(0, startingPerfectRangePositionY, 0);
+        
+        float elapsedTime = 0f;
         while (elapsedTime < PLAYER_TURN_TIME)
         {
             // Increment the elapsed time by the time passed since the last frame
@@ -76,10 +78,11 @@ public class GameManager : Singleton<GameManager>
 
             if (SwipeManager.Instance.SwipeIsMeasured)
             {
+                // todo Add if ball animation is playing (avoid this loop multiple times)
+                //if (activeBall.IsInParabolicMovement) continue;
                 // do things with normalized distance value
-                var n = SwipeManager.Instance.normalizedDistance;
-                //Debug.Log(n);
-                //if (n <= MIN_SWIPE) continue;
+                var shootType = GetShootType(SwipeManager.Instance.normalizedDistance);
+                Debug.Log("type: "+shootType.ToString());
                 if (activeBall.IsInitialized || activeBall.IsReady)
                 {
                     activeBall.Setup();
@@ -99,7 +102,7 @@ public class GameManager : Singleton<GameManager>
 
     private IEnumerator HandleEnd()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(0.1f);
         // Go to next state
       
         ChangeState(GameState.PlayerTurn);
