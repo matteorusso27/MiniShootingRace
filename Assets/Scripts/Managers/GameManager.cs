@@ -11,6 +11,11 @@ public class GameManager : Singleton<GameManager>
 
     public GameState State { get; private set; }
 
+    #region GAME VARIABLES
+    private int currentScore = 0; //todo add a score manager?
+    private ShootType currentShoot;
+    #endregion
+
     void Start()
     {
         ChangeState(GameState.Start);
@@ -65,10 +70,13 @@ public class GameManager : Singleton<GameManager>
         Coroutine swipeAgainCoroutine = null;
         var activeBall = InstanceManager.Instance._inGameObjects.Where(go => go.GetComponent<NormalBall>() != null).
             FirstOrDefault()?.GetComponent<NormalBall>();
-        CalculatePerfectRange(difficulty: 4);
+        CalculateRanges(difficulty: 6);
         var startingPerfectRangePositionY = CanvasManager.Instance.Canvas.fillBar.rectTransform.rect.height * START_RANGE_PERFECT_SHOOT;
         CanvasManager.Instance.Canvas.PerfectRange.rectTransform.anchoredPosition = new Vector3(0, startingPerfectRangePositionY, 0);
-        
+
+        var startingBoardRangePositionY = CanvasManager.Instance.Canvas.fillBar.rectTransform.rect.height * START_RANGE_BOARD_SHOOT;
+        CanvasManager.Instance.Canvas.BoardRange.rectTransform.anchoredPosition = new Vector3(0, startingBoardRangePositionY, 0);
+        activeBall.OnScoreUpdate += OnScoreUpdated;
         float elapsedTime = 0f;
         while (elapsedTime < PLAYER_TURN_TIME)
         {
@@ -80,12 +88,11 @@ public class GameManager : Singleton<GameManager>
             {
                 // todo Add if ball animation is playing (avoid this loop multiple times)
                 //if (activeBall.IsInParabolicMovement) continue;
-                // do things with normalized distance value
-                var shootType = GetShootType(SwipeManager.Instance.normalizedDistance);
-                Debug.Log("type: "+shootType.ToString());
+                currentShoot = GetShootType(SwipeManager.Instance.normalizedDistance);
                 if (activeBall.IsInitialized || activeBall.IsReady)
                 {
                     activeBall.Setup();
+                    activeBall.CalculateLaunchParameters(currentShoot);
                     activeBall.StartParabolic();
                 }
                 
@@ -97,6 +104,7 @@ public class GameManager : Singleton<GameManager>
         }
         swipeAgainCoroutine = null;
         // Go to next state
+        activeBall.OnScoreUpdate -= OnScoreUpdated;
         ChangeState(GameState.End);
     }
 
@@ -114,5 +122,14 @@ public class GameManager : Singleton<GameManager>
         SpawningPlayer = 1,
         PlayerTurn = 2,
         End = 3
+    }
+
+    public void OnScoreUpdated(int score)
+    {
+        Debug.Log("Score: " + currentScore);
+        Debug.Log("New Score: " + (currentScore + score));
+        Debug.Log("-------------------------------------");
+        currentScore += score;
+        CanvasManager.Instance.Canvas.SetScore(currentScore);
     }
 }

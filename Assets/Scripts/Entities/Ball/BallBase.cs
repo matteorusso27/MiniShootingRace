@@ -14,6 +14,12 @@ public class BallBase : MonoBehaviour
 
     public Vector3 currentPosition;
     public Vector3 startingPosition;
+
+    // For score updates
+    private int encounteredTriggers = 0;
+
+    public delegate void ScoreUpdateEventHandler(int score);
+    public event ScoreUpdateEventHandler OnScoreUpdate;
     public enum BallState
     {
         Initialized,
@@ -65,8 +71,8 @@ public class BallBase : MonoBehaviour
     public void Setup()
     {
         currentTime = 0f;
+        encounteredTriggers = 0;
         transform.position = startingPosition;
-        CalculateLaunchParameters();
         ChangeState(BallState.Ready);
     }
 
@@ -84,9 +90,21 @@ public class BallBase : MonoBehaviour
         HandleRotation();
     }
 
-    void CalculateLaunchParameters()
+    public void CalculateLaunchParameters(ShootType shootType)
     {
-        Vector3 displacement = HOOP_POSITION - startingPosition;
+        Vector3 finalPosition;
+        if (shootType == ShootType.PerfectShoot || shootType == ShootType.RegularShoot)
+            finalPosition = HOOP_POSITION;
+        else if (shootType == ShootType.BoardShoot)
+        {
+            finalPosition = BOARD_HIT_POSITION;
+        }
+        else
+        {
+            //to do random and based on the force to the ball
+            finalPosition = new Vector3(3.5f, HOOP_POSITION.y, HOOP_POSITION.z); 
+        }
+        Vector3 displacement = finalPosition - startingPosition;
         float time = Mathf.Sqrt(2 * Mathf.Abs(displacement.y / GRAVITY));
 
         float horizontalVelocity = displacement.x / time;
@@ -131,11 +149,6 @@ public class BallBase : MonoBehaviour
         ChangeRigidbodyValues();
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-
-    }
-
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag(StringTag(GameTag.Board)))
@@ -150,9 +163,24 @@ public class BallBase : MonoBehaviour
         }
     }
 
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag(StringTag(GameTag.HoopTriggers)))
+        {
+            encounteredTriggers++;
+            if (encounteredTriggers == 2)
+            {
+                Debug.Log("update score encountered");
+                OnScoreUpdate?.Invoke(2);
+                encounteredTriggers = 0;
+            }
+        }
+    }
+
     public IEnumerator ResetBall()
     {
-        yield return new WaitForSeconds(1.5f);
+        //yield return new WaitForSeconds(1.5f);
+        yield return new WaitForEndOfFrame();
         Setup();
         ChangeRigidbodyValues();
     }
