@@ -21,7 +21,6 @@ public class InstanceManager : Singleton<InstanceManager>
 
     public void SpawnBall(BallType ballType)
     {
-        Debug.Log("spaen ball");
         var ballPosition = new Vector3(1, 7, -3);
         var ballScriptable = ResourceSystem.Instance.GetBalls(ballType);
         var toSpawn = Instantiate(ballScriptable.prefab, ballPosition, Quaternion.identity);
