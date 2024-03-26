@@ -84,13 +84,6 @@ public static class Helpers
         FailedShoot
     }
 
-    public enum BallState
-    {
-        Initialized,
-        Ready,
-        ParabolicMovement,
-        PhysicsSimulation,
-        Grounded
-    }
+    public static int GetRandomNumber(int min, int max) => RANDOM.Next(min, max + 1);
     #endregion
 }
