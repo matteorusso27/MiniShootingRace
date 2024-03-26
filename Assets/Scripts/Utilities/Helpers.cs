@@ -20,6 +20,9 @@ public static class Helpers
 
     public static Vector3   HOOP_POSITION = new Vector3(0.25f, 8.732f, 5.43f);
     public static Vector3   BOARD_HIT_POSITION = new Vector3(0.43f, 10f, 6.35f);
+
+    public static System.Random RANDOM = new System.Random();
+
     public enum GameTag
     {
         Terrain,
@@ -38,7 +41,7 @@ public static class Helpers
             case ShootType.RegularShoot:
                 return 2;
             case ShootType.BoardShoot:
-                return isBoardSparking ? BOARD_SPARKING_SHOOT_SCORE : REGULAR_SHOOT_SCORE;
+                return isBoardSparking ? GetRandomNumber(4,5) : REGULAR_SHOOT_SCORE;
             default:
                 return 0;
         }

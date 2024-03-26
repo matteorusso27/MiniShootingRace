@@ -12,7 +12,7 @@ public class CanvasManager : Singleton<CanvasManager>
 
     public void SetupFillBar()
     {
-        CalculateRanges(difficulty: 6);
+        CalculateRanges(difficulty: 5);
         DrawRanges();
     }
 
@@ -20,8 +20,7 @@ public class CanvasManager : Singleton<CanvasManager>
     {
         // todo should not be random but based on the court position, however is good to be a number 
         // between {2,3,4,5}
-        System.Random rnd = new System.Random();
-        var numb = rnd.Next(2, difficulty);
+        var numb = GetRandomNumber(2, difficulty);
         START_RANGE_PERFECT_SHOOT = (1f / numb);
         END_RANGE_PERFECT_SHOOT = START_RANGE_PERFECT_SHOOT + Canvas.PerfectRange.rectTransform.rect.height / Canvas.fillBar.rectTransform.rect.height;
 
