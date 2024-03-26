@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6374074910453525064}
   - component: {fileID: 2212935159279561417}
   - component: {fileID: 3339933537023756282}
+  - component: {fileID: 8673715660799288133}
   m_Layer: 0
   m_Name: NormalBall
   m_TagString: Untagged
@@ -110,9 +111,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1594731d1710ba640ba99bb2b80896c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialVelocity: 10
-  launchAngle: 60
-  useParabolicMovement: 1
   currentPosition: {x: 0, y: 0, z: 0}
   startingPosition: {x: 0, y: 0, z: 0}
   State: 0
+--- !u!54 &8673715660799288133
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6114855324382863990}
+  serializedVersion: 2
+  m_Mass: 10
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

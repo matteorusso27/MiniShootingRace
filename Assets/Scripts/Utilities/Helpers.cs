@@ -6,7 +6,7 @@ public static class Helpers
 {
     public static float     TIME_TO_SWIPE = 1.5f;
     public static float     PLAYER_TURN_TIME = 15f;
-    public static float     GRAVITY = 9.8f;
+    public static float     GRAVITY = 9.81f;
     public static float     MIN_SWIPE = 0.2f;
     public static float     RANGES_DISTANCE = 0.2f;
 
@@ -18,7 +18,7 @@ public static class Helpers
     public static int       BOARD_SPARKING_SHOOT_SCORE = 8;
     #endregion
 
-    public static Vector3   HOOP_POSITION = new Vector3(0.25f, 8.732f, 5.43f);
+    public static Vector3   HOOP_POSITION = new Vector3(0.013f, 0f, 0.97f);
     public static Vector3   BOARD_HIT_POSITION = new Vector3(0.43f, 10f, 6.35f);
 
     public static System.Random RANDOM = new System.Random();

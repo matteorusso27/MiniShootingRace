@@ -4,7 +4,7 @@ using static Helpers;
 public class BallBase : MonoBehaviour
 {
     // Parameters for parabolic movement
-    private Vector3 initialVelocity;
+    private float initialVelocity = 1;
 
     // Time variables
     private float currentTime = 0f;
@@ -88,7 +88,7 @@ public class BallBase : MonoBehaviour
         CanvasManager.Instance.Canvas.SetBallState(State.ToString());
         if (IsGrounded) return;
 
-        HandleMovement();
+        //HandleMovement();
         HandleRotation();
     }
 
@@ -106,19 +106,42 @@ public class BallBase : MonoBehaviour
             //to do random and based on the force to the ball
             finalPosition = new Vector3(3.5f, HOOP_POSITION.y, HOOP_POSITION.z); 
         }
-        Vector3 displacement = finalPosition - startingPosition;
-        float time = Mathf.Sqrt(2 * Mathf.Abs(displacement.y / GRAVITY));
+        var rigid = GetComponent<Rigidbody>();
 
-        float horizontalVelocity = displacement.x / time;
-        float verticalVelocity = displacement.y / time;
-        float forwardVelocity = displacement.z / time;
+        Vector3 p = BOARD_HIT_POSITION;
 
-        if (displacement.y < 0) verticalVelocity *= -1;
+        var diff = transform.position - p;
+        float gravity = Physics.gravity.magnitude;
+        // Selected angle in radians
+        float angle = 60 * Mathf.Deg2Rad;
 
-        initialVelocity = new Vector3(horizontalVelocity, verticalVelocity + 0.5f * GRAVITY * time, forwardVelocity);
+        // Positions of this object and the target on the same plane
+        Vector3 planarTarget = new Vector3(p.x, 0, p.z);
+        Vector3 planarPostion = new Vector3(transform.position.x, 0, transform.position.z);
+
+        // Planar distance between objects
+        float distance = Vector3.Distance(planarTarget, planarPostion);
+        // Distance along the y axis between objects
+        float yOffset = transform.position.y - p.y;
+
+        var d = p - transform.position;
+        float initialVelocity = (1 / Mathf.Cos(angle)) * Mathf.Sqrt((0.5f * gravity * Mathf.Pow(distance, 2)) / (distance * Mathf.Tan(angle) + yOffset));
+        Vector3 velocity = new Vector3(0f, initialVelocity * Mathf.Sin(angle), initialVelocity * Mathf.Cos(angle));
+
+        Vector3 finalVelocity = velocity;
+        Debug.Log(finalVelocity);
+        Debug.Log("diff: "+diff);
+        // Fire!
+        ChangeState(BallState.ParabolicMovement);
+        rb.isKinematic = false;
+        rb.useGravity = true;
+        //rigid.velocity = finalVelocity;
+        rigid.AddForce(finalVelocity * rigid.mass, ForceMode.Impulse);
     }
+
     private void HandleMovement()
     {
+        /*
         if (IsInParabolicMovement)
         {
             currentTime += Time.deltaTime;
@@ -134,6 +157,7 @@ public class BallBase : MonoBehaviour
                 SimulatePhysicsMode();
             }
         }
+        */
     }
     private void HandleRotation()
     {

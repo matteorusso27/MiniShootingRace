@@ -93,11 +93,12 @@ public class GameManager : Singleton<GameManager>
                 // todo Add if ball animation is playing (avoid this loop multiple times)
                 //if (activeBall.IsInParabolicMovement) continue;
                 Game_variables.currentShoot = GetShootType(SwipeManager.Instance.normalizedDistance);
-                if (activeBall.IsInitialized || activeBall.IsReady)
+                if (activeBall.IsInitialized || activeBall.IsReady && !activeBall.IsInParabolicMovement)
                 {
                     activeBall.Setup();
                     activeBall.CalculateLaunchParameters(Game_variables.currentShoot);
-                    activeBall.StartParabolic();
+                    //activeBall.StartParabolic();
+                    //StartCoroutine(activeBall.HandleMovement());
                 }
                 
                 // Then start again
@@ -138,6 +139,7 @@ public class GameManager : Singleton<GameManager>
             toChange = Game_variables.elapsedTime >= SPARKING_BOARD_TIME;
         var board = GameObject.FindGameObjectWithTag(StringTag(GameTag.Board));
         board.GetComponent<MeshRenderer>().enabled = toChange;
+        Game_variables.isBoardSparking = toChange;
     }
     public void OnScoreUpdated()
     {
