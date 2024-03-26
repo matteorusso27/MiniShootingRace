@@ -12,8 +12,15 @@ public class GameManager : Singleton<GameManager>
     public GameState State { get; private set; }
 
     #region GAME VARIABLES
-    private int currentScore = 0; //todo add a score manager?
-    private ShootType currentShoot;
+    public struct GameVariables
+    {
+        public int currentScore; //todo add a score manager?
+        public float elapsedTime;
+        public ShootType currentShoot;
+        public bool isBoardSparking;
+    }
+
+    GameVariables Game_variables;
     #endregion
 
     void Start()
@@ -65,6 +72,7 @@ public class GameManager : Singleton<GameManager>
 
     private IEnumerator HandlePlayerTurn()
     {
+        Game_variables.elapsedTime = 0f;
         SwipeManager.Instance.Setup();
 
         Coroutine swipeAgainCoroutine = null;
@@ -72,22 +80,23 @@ public class GameManager : Singleton<GameManager>
             FirstOrDefault()?.GetComponent<NormalBall>();
         CanvasManager.Instance.SetupFillBar();
         activeBall.OnScoreUpdate += OnScoreUpdated;
-        float elapsedTime = 0f;
-        while (elapsedTime < PLAYER_TURN_TIME)
+        activeBall.OnResetBall += HandleSparkingBoard;
+
+        while (Game_variables.elapsedTime < PLAYER_TURN_TIME || !activeBall.IsReady)
         {
             // Increment the elapsed time by the time passed since the last frame
-            elapsedTime += Time.deltaTime;
-            CanvasManager.Instance.Canvas.SetTime((int)(PLAYER_TURN_TIME - elapsedTime));
+            Game_variables.elapsedTime += Time.deltaTime;
+            CanvasManager.Instance.Canvas.SetTime((int)(PLAYER_TURN_TIME - Game_variables.elapsedTime));
 
             if (SwipeManager.Instance.SwipeIsMeasured)
             {
                 // todo Add if ball animation is playing (avoid this loop multiple times)
                 //if (activeBall.IsInParabolicMovement) continue;
-                currentShoot = GetShootType(SwipeManager.Instance.normalizedDistance);
+                Game_variables.currentShoot = GetShootType(SwipeManager.Instance.normalizedDistance);
                 if (activeBall.IsInitialized || activeBall.IsReady)
                 {
                     activeBall.Setup();
-                    activeBall.CalculateLaunchParameters(currentShoot);
+                    activeBall.CalculateLaunchParameters(Game_variables.currentShoot);
                     activeBall.StartParabolic();
                 }
                 
@@ -99,6 +108,8 @@ public class GameManager : Singleton<GameManager>
         swipeAgainCoroutine = null;
         // Go to next state
         activeBall.OnScoreUpdate -= OnScoreUpdated;
+        activeBall.OnResetBall -= HandleSparkingBoard;
+        HandleSparkingBoard(true);
         ChangeState(GameState.End);
     }
 
@@ -118,10 +129,20 @@ public class GameManager : Singleton<GameManager>
         End = 3
     }
 
+    private void HandleSparkingBoard(bool disable = false)
+    {
+        bool toChange;
+        if (disable == true)
+            toChange = false;
+        else
+            toChange = Game_variables.elapsedTime >= SPARKING_BOARD_TIME;
+        var board = GameObject.FindGameObjectWithTag(StringTag(GameTag.Board));
+        board.GetComponent<MeshRenderer>().enabled = toChange;
+    }
     public void OnScoreUpdated()
     {
-        var score = GetScore(currentShoot);
-        currentScore += score;
-        CanvasManager.Instance.Canvas.SetScore(currentScore);
+        var score = GetScore(Game_variables.currentShoot, Game_variables.isBoardSparking);
+        Game_variables.currentScore += score;
+        CanvasManager.Instance.Canvas.SetScore(Game_variables.currentScore);
     }
 }

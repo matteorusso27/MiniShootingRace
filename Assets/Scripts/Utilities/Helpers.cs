@@ -10,6 +10,14 @@ public static class Helpers
     public static float     MIN_SWIPE = 0.2f;
     public static float     RANGES_DISTANCE = 0.2f;
 
+    public static float     SPARKING_BOARD_TIME = PLAYER_TURN_TIME / 2f;
+
+    #region ScorePoints
+    public static int       PERFECT_SHOOT_SCORE = 3;
+    public static int       REGULAR_SHOOT_SCORE = 2;
+    public static int       BOARD_SPARKING_SHOOT_SCORE = 8;
+    #endregion
+
     public static Vector3   HOOP_POSITION = new Vector3(0.25f, 8.732f, 5.43f);
     public static Vector3   BOARD_HIT_POSITION = new Vector3(0.43f, 10f, 6.35f);
     public enum GameTag
@@ -21,15 +29,16 @@ public static class Helpers
 
     public static string StringTag(GameTag t) => t.ToString();
 
-    public static int GetScore(ShootType shootType)
+    public static int GetScore(ShootType shootType, bool isBoardSparking)
     {
         switch (shootType)
         {
             case ShootType.PerfectShoot:
                 return 3;
             case ShootType.RegularShoot:
-            case ShootType.BoardShoot:
                 return 2;
+            case ShootType.BoardShoot:
+                return isBoardSparking ? BOARD_SPARKING_SHOOT_SCORE : REGULAR_SHOOT_SCORE;
             default:
                 return 0;
         }
@@ -73,6 +82,15 @@ public static class Helpers
         RegularShoot,
         BoardShoot,
         FailedShoot
+    }
+
+    public enum BallState
+    {
+        Initialized,
+        Ready,
+        ParabolicMovement,
+        PhysicsSimulation,
+        Grounded
     }
     #endregion
 }

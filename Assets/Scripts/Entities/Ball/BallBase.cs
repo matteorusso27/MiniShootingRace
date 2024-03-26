@@ -20,6 +20,9 @@ public class BallBase : MonoBehaviour
 
     public delegate void ScoreUpdateEventHandler();
     public event ScoreUpdateEventHandler OnScoreUpdate;
+
+    public delegate void ResetBallHandler(bool isForced = false);
+    public event ResetBallHandler OnResetBall;
     public enum BallState
     {
         Initialized,
@@ -182,5 +185,6 @@ public class BallBase : MonoBehaviour
         yield return new WaitForEndOfFrame();
         Setup();
         ChangeRigidbodyValues();
+        OnResetBall?.Invoke();
     }
 }
