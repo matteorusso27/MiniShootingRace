@@ -20,7 +20,7 @@ public class GameManager : Singleton<GameManager>
         public bool isBoardSparking;
     }
 
-    GameVariables Game_variables;
+    public GameVariables Game_variables;
     #endregion
 
     void Start()
@@ -94,11 +94,14 @@ public class GameManager : Singleton<GameManager>
             {
                 // todo Add if ball animation is playing (avoid this loop multiple times)
                 //if (activeBall.IsInParabolicMovement) continue;
-                Game_variables.currentShoot = GetShootType(SwipeManager.Instance.normalizedDistance);
+                var normalizedValue = SwipeManager.Instance.normalizedDistance;
+                Game_variables.currentShoot = GetShootType(normalizedValue);
+                var finalPosition = GetFinalPosition(Game_variables.currentShoot, normalizedValue);
+                SetThrowHeight(Game_variables.currentShoot, normalizedValue);
                 if (activeBall.IsReady)
                 {
                     activeBall.Setup();
-                    MotionManager.Instance.Setup(activeBall.transform.position, HOOP_POSITION, isPlayerBall:true);
+                    MotionManager.Instance.Setup(activeBall.transform.position, finalPosition, isPlayerBall:true);
                     if(!MotionManager.Instance.IsPlayerBallInMotion)
                         MotionManager.Instance.StartMotion(IsPlayerBall: true);
                 }

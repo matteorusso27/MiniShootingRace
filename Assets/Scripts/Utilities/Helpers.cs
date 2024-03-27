@@ -20,6 +20,9 @@ public static class Helpers
 
     public static Vector3   HOOP_POSITION = new Vector3(0.27f, 7.62f, 5.92f);
     public static Vector3   BOARD_HIT_POSITION = new Vector3(0.43f, 10f, 6.35f);
+    public static Vector3   LOW_THROW_POSITION = new Vector3(0.43f, 0f, 2.35f);
+    public static Vector3   HIGH_THROW_POSITION = new Vector3(0f, 0f, 20);
+
 
     public static float THROW_HEIGHT = 15f;
     public static System.Random RANDOM = new System.Random();
@@ -48,7 +51,7 @@ public static class Helpers
                 return 0;
         }
     }
-        #region SHOOT PARAMETERS
+    #region SHOOT PARAMETERS
     
     public static float START_RANGE_PERFECT_SHOOT;
     public static float END_RANGE_PERFECT_SHOOT;
@@ -81,6 +84,25 @@ public static class Helpers
         return ShootType.FailedShoot;
     }
 
+    public static void SetThrowHeight(ShootType shootype, float chargedValue)
+    {
+        switch (shootype)
+        {
+            case ShootType.PerfectShoot:
+            case ShootType.RegularShoot:
+            case ShootType.BoardShoot:
+                THROW_HEIGHT = 15f;
+                break;
+            case ShootType.FailedShoot:
+            default:
+                if(chargedValue < START_RANGE_PERFECT_SHOOT)
+                    THROW_HEIGHT = 5f;
+                else
+                    THROW_HEIGHT = 20;
+                break;
+        }
+    }
+
     public enum ShootType
     {
         PerfectShoot,
@@ -90,5 +112,24 @@ public static class Helpers
     }
 
     public static int GetRandomNumber(int min, int max) => RANDOM.Next(min, max + 1);
-    #endregion
+
+    public static Vector3 GetFinalPosition(ShootType shootType, float value)
+    {
+        switch (shootType)
+        {
+            case ShootType.PerfectShoot:
+            case ShootType.RegularShoot:
+                return HOOP_POSITION;
+            case ShootType.BoardShoot:
+                return BOARD_HIT_POSITION;
+            case ShootType.FailedShoot:
+                if (value <= START_RANGE_PERFECT_SHOOT)
+                    return LOW_THROW_POSITION;
+                else
+                    return HIGH_THROW_POSITION;
+            default:
+                return Vector3.zero;
+        }
+        #endregion
+    }
 }

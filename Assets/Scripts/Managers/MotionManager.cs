@@ -8,7 +8,7 @@ public class MotionManager : Singleton<MotionManager>
     public QuadraticCurve  PlayerCurve;
     public QuadraticCurve  EnemyCurve;
     public float           CurrentTime;
-    public float           Speed = 5f;
+    public float           Speed = 5f; // todo needed?
 
     public bool            IsPlayerBallInMotion;
     public bool            IsEnemyBallInMotion;
@@ -37,7 +37,7 @@ public class MotionManager : Singleton<MotionManager>
         var d = Vector3.Distance(curve.StartingPoint, curve.FinalPoint);
         while ( d >= 0.5)
         {
-            CurrentTime  += Time.deltaTime * Speed;
+            CurrentTime  += Time.deltaTime;
             ball.position = curve.Evaluate(CurrentTime);
             ball.forward  = curve.Evaluate(CurrentTime + 0.001f) - ball.position;
 
@@ -46,8 +46,21 @@ public class MotionManager : Singleton<MotionManager>
         }
         Debug.Log("Finished");
         CurrentTime = 0f;
-        if (IsPlayerBall) IsPlayerBallInMotion = false;
-        else IsEnemyBallInMotion = false;
+        if (IsPlayerBall)
+        {
+            IsPlayerBallInMotion = false;
+            if (GameManager.Instance.Game_variables.currentShoot == ShootType.BoardShoot)
+            {
+                ball.GetComponent<BallBase>().SimulatePhysicsMode();
+            }
+            else
+                ball.GetComponent<BallBase>().StartReset();
+        }
+        else
+        {
+            //todo end motion to take physics
+            IsEnemyBallInMotion = false;
+        }
     }
 
     public GameObject GetBall(bool IsPlayerBall) => IsPlayerBall ? Balls[0] : Balls[1];

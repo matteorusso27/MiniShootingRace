@@ -62,15 +62,15 @@ public class BallBase : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag(StringTag(GameTag.Board)))
-        {
-            SimulatePhysicsMode();
-        }
-
+        //todo maybe remove
+        //if (collision.gameObject.CompareTag(StringTag(GameTag.Board)))
+        //{
+        //    SimulatePhysicsMode();
+        //}
+        
         if (collision.gameObject.CompareTag(StringTag(GameTag.Terrain)))
         {
-            ChangeState(BallState.Grounded);
-            StartCoroutine(ResetBall());
+            StartReset();
         }
     }
 
@@ -83,7 +83,6 @@ public class BallBase : MonoBehaviour
             {
                 Debug.Log("update score encountered");
                 OnScoreUpdate?.Invoke();
-                encounteredTriggers = 0;
             }
         }
     }
@@ -96,6 +95,11 @@ public class BallBase : MonoBehaviour
         }
     }
 
+    public void StartReset()
+    {
+        ChangeState(BallState.Grounded);
+        StartCoroutine(ResetBall());
+    }
     public IEnumerator ResetBall()
     {
         yield return new WaitForSeconds(1f);
@@ -103,6 +107,7 @@ public class BallBase : MonoBehaviour
         transform.position = StartingPosition;
         rb.isKinematic = true;
         rb.useGravity = false;
+        encounteredTriggers = 0;
         OnResetBall?.Invoke();
     }
 }
