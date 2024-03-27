@@ -111,8 +111,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1594731d1710ba640ba99bb2b80896c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentPosition: {x: 0, y: 0, z: 0}
-  startingPosition: {x: 0, y: 0, z: 0}
   State: 0
 --- !u!54 &8673715660799288133
 Rigidbody:
@@ -125,8 +123,8 @@ Rigidbody:
   m_Mass: 10
   m_Drag: 0
   m_AngularDrag: 0
-  m_UseGravity: 1
-  m_IsKinematic: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0

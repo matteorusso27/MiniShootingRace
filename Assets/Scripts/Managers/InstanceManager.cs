@@ -3,6 +3,7 @@ using static ScriptableCharacterBase;
 using static ScriptableBallBase;
 using System.Collections;
 using System.Collections.Generic;
+using static Helpers;
 
 public class InstanceManager : Singleton<InstanceManager>
 {
@@ -21,7 +22,7 @@ public class InstanceManager : Singleton<InstanceManager>
 
     public void SpawnBall(BallType ballType)
     {
-        var ballPosition = new Vector3(3, 7, -3);
+        var ballPosition = new Vector3(GetRandomNumber(-7,7), 4, -3);
         var ballScriptable = ResourceSystem.Instance.GetBalls(ballType);
         var toSpawn = Instantiate(ballScriptable.prefab, ballPosition, Quaternion.identity);
         _inGameObjects.Add(toSpawn.gameObject);

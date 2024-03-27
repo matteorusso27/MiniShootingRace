@@ -18,16 +18,18 @@ public static class Helpers
     public static int       BOARD_SPARKING_SHOOT_SCORE = 8;
     #endregion
 
-    public static Vector3   HOOP_POSITION = new Vector3(0.013f, 0f, 0.97f);
+    public static Vector3   HOOP_POSITION = new Vector3(0.27f, 7.62f, 5.92f);
     public static Vector3   BOARD_HIT_POSITION = new Vector3(0.43f, 10f, 6.35f);
 
+    public static float THROW_HEIGHT = 15f;
     public static System.Random RANDOM = new System.Random();
 
     public enum GameTag
     {
         Terrain,
         Board,
-        HoopTriggers
+        HoopTriggers,
+        TriggerGravity
     }
 
     public static string StringTag(GameTag t) => t.ToString();

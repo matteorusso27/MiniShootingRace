@@ -82,8 +82,10 @@ public class GameManager : Singleton<GameManager>
         activeBall.OnScoreUpdate += OnScoreUpdated;
         activeBall.OnResetBall += HandleSparkingBoard;
 
+        
         while (Game_variables.elapsedTime < PLAYER_TURN_TIME || !activeBall.IsReady)
         {
+            activeBall.StartingPosition = new Vector3(GetRandomNumber(-7, 7), 4, -3);
             // Increment the elapsed time by the time passed since the last frame
             Game_variables.elapsedTime += Time.deltaTime;
             CanvasManager.Instance.Canvas.SetTime((int)(PLAYER_TURN_TIME - Game_variables.elapsedTime));
@@ -93,12 +95,12 @@ public class GameManager : Singleton<GameManager>
                 // todo Add if ball animation is playing (avoid this loop multiple times)
                 //if (activeBall.IsInParabolicMovement) continue;
                 Game_variables.currentShoot = GetShootType(SwipeManager.Instance.normalizedDistance);
-                if (activeBall.IsInitialized || activeBall.IsReady && !activeBall.IsInParabolicMovement)
+                if (activeBall.IsReady)
                 {
                     activeBall.Setup();
-                    activeBall.CalculateLaunchParameters(Game_variables.currentShoot);
-                    //activeBall.StartParabolic();
-                    //StartCoroutine(activeBall.HandleMovement());
+                    MotionManager.Instance.Setup(activeBall.transform.position, HOOP_POSITION, isPlayerBall:true);
+                    if(!MotionManager.Instance.IsPlayerBallInMotion)
+                        MotionManager.Instance.StartMotion(IsPlayerBall: true);
                 }
                 
                 // Then start again
