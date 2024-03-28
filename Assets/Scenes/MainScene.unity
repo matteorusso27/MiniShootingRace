@@ -1172,8 +1172,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.25777993, y: -0.2646073, z: 0.103187755, w: 0.9235176}
-  m_LocalPosition: {x: 16.105417, y: 24.145327, z: -24.213762}
+  m_LocalRotation: {x: 0.2477624, y: -0.10952691, z: 0.040198397, w: 0.9617702}
+  m_LocalPosition: {x: 7.6, y: 20.459759, z: -23.845364}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1425,6 +1425,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1087242126}
   - component: {fileID: 1087242125}
+  - component: {fileID: 1087242127}
   m_Layer: 0
   m_Name: CM vcam1
   m_TagString: Untagged
@@ -1477,15 +1478,27 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1087242124}
-  m_LocalRotation: {x: 0.30344436, y: -0.26941708, z: 0.08988433, w: 0.9095366}
-  m_LocalPosition: {x: 16.105417, y: 28.703934, z: -23.42217}
+  m_LocalRotation: {x: 0.2953439, y: -0.111392625, z: 0.034694925, w: 0.94824046}
+  m_LocalPosition: {x: 7.6, y: 25, z: -23.42217}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 521919172}
   m_Father: {fileID: 0}
   m_RootOrder: 11
-  m_LocalEulerAnglesHint: {x: 36.9, y: -33, z: 0}
+  m_LocalEulerAnglesHint: {x: 34.6, y: -13.4, z: 0}
+--- !u!114 &1087242127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1087242124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba98e919c32cf654880764e2b985c546, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1116723321 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6993974620152334023, guid: 5e0d077a9390ade43bbd04d6ef7d8f26, type: 3}
@@ -1717,6 +1730,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentTime: 0
+  CurrentTimeEnemy: 0
   Speed: 2
   IsPlayerBallInMotion: 0
   IsEnemyBallInMotion: 0

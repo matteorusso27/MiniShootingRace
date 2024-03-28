@@ -6,9 +6,10 @@ public class Camera : Singleton<Camera>
 {
     void Update()
     {
-        if (GameManager.Instance.State == GameManager.GameState.PlayerTurn)
+        var ball = InstanceManager.Instance.GetBalls()[0].gameObject.transform;
+        if (ball != null)
         {
-            GetComponent<CinemachineVirtualCamera>().LookAt = InstanceManager.Instance.GetBalls()[0].gameObject.transform;
+            GetComponent<CinemachineVirtualCamera>().LookAt = ball; 
         }
     }
 }
