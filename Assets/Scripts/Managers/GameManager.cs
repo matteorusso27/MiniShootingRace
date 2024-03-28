@@ -11,6 +11,8 @@ public class GameManager : Singleton<GameManager>
 
     public GameState State { get; private set; }
 
+    public bool IsPlayerTurn() { return State == GameState.PlayerTurn; }
+
     #region GAME VARIABLES
     public struct GameVariables
     {

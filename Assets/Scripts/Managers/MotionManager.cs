@@ -8,7 +8,7 @@ public class MotionManager : Singleton<MotionManager>
     public QuadraticCurve  PlayerCurve;
     public QuadraticCurve  EnemyCurve;
     public float           CurrentTime;
-    public float           Speed = 5f; // todo needed?
+    public float           Speed = 1f; // todo needed?
 
     public bool            IsPlayerBallInMotion;
     public bool            IsEnemyBallInMotion;
@@ -16,7 +16,7 @@ public class MotionManager : Singleton<MotionManager>
    
     public void Setup(Vector3 startingPoint, Vector3 finalPoint, bool isPlayerBall)
     {
-        Balls = InstanceManager.Instance._inGameObjects.Where(x => x.GetComponent<BallBase>() != null).ToArray();
+        Balls = InstanceManager.Instance.GetBalls().Select(x=> x.gameObject).ToArray();
 
         if (isPlayerBall)
             PlayerCurve = new QuadraticCurve(startingPoint, finalPoint);
@@ -44,7 +44,7 @@ public class MotionManager : Singleton<MotionManager>
             d = Vector3.Distance(ball.transform.position, curve.FinalPoint);
             yield return null;
         }
-        Debug.Log("Finished");
+
         CurrentTime = 0f;
         if (IsPlayerBall)
         {

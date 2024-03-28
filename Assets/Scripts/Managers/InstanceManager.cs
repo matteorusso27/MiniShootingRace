@@ -4,6 +4,7 @@ using static ScriptableBallBase;
 using System.Collections;
 using System.Collections.Generic;
 using static Helpers;
+using System.Linq;
 
 public class InstanceManager : Singleton<InstanceManager>
 {
@@ -12,6 +13,11 @@ public class InstanceManager : Singleton<InstanceManager>
     public void Start()
     {
         _inGameObjects = new List<GameObject>();
+    }
+
+    public BallBase[] GetBalls()
+    {
+        return InstanceManager.Instance._inGameObjects.Where(x => x.GetComponent<BallBase>() != null).Select(x=> x.GetComponent<BallBase>()).ToArray();
     }
 
     public void SpawnPlayerAndBall()
