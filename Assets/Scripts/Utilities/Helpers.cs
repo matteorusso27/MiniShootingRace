@@ -20,6 +20,7 @@ public static class Helpers
 
     public static Vector3   HOOP_POSITION = new Vector3(0.27f, 7.62f, 5.92f);
     public static Vector3   BOARD_HIT_POSITION = new Vector3(0.43f, 10f, 6.35f);
+    public static Vector3   MISS_BOARD_HIT_POSITION = new Vector3(3.43f, 10f, 6.35f);
     public static Vector3   LOW_THROW_POSITION = new Vector3(0.43f, 0f, 2.35f);
     public static Vector3   HIGH_THROW_POSITION = new Vector3(0f, 0f, 20);
 
@@ -84,6 +85,8 @@ public static class Helpers
         return ShootType.FailedShoot;
     }
 
+    public static ShootType GetRandomShootType() => (ShootType) GetRandomNumber(0, 3);
+    
     public static void SetThrowHeight(ShootType shootype, float chargedValue)
     {
         switch (shootype)
@@ -125,6 +128,8 @@ public static class Helpers
             case ShootType.FailedShoot:
                 if (value <= START_RANGE_PERFECT_SHOOT)
                     return LOW_THROW_POSITION;
+                if (value <= START_RANGE_BOARD_SHOOT)
+                    return MISS_BOARD_HIT_POSITION;
                 else
                     return HIGH_THROW_POSITION;
             default:

@@ -17,6 +17,8 @@ public class BallBase : MonoBehaviour
         Movement,
         Grounded
     }
+
+    public bool IsPlayer;
     public BallState State;
     private float rotationSpeed = 200f;
 
@@ -63,10 +65,10 @@ public class BallBase : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         //todo maybe remove
-        //if (collision.gameObject.CompareTag(StringTag(GameTag.Board)))
-        //{
-        //    SimulatePhysicsMode();
-        //}
+        if (collision.gameObject.CompareTag(StringTag(GameTag.Board)))
+        {
+            SimulatePhysicsMode();
+        }
         
         if (collision.gameObject.CompareTag(StringTag(GameTag.Terrain)))
         {

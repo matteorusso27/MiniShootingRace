@@ -20,17 +20,21 @@ public class InstanceManager : Singleton<InstanceManager>
         return InstanceManager.Instance._inGameObjects.Where(x => x.GetComponent<BallBase>() != null).Select(x=> x.GetComponent<BallBase>()).ToArray();
     }
 
+    public BallBase GetBall(bool IsPlayer) => GetBalls().Where(x => x.IsPlayer == IsPlayer).FirstOrDefault();
     public void SpawnPlayerAndBall()
     {
         SpawnPlayer(EntityType.Player);
-        SpawnBall(BallType.NormalBall);
+        SpawnBall(BallType.NormalBall, IsPlayer: true);
+        SpawnBall(BallType.NormalBall, IsPlayer: false);
     }
 
-    public void SpawnBall(BallType ballType)
+    public void SpawnBall(BallType ballType, bool IsPlayer)
     {
-        var ballPosition = new Vector3(GetRandomNumber(-7,7), 4, -3);
+        var range = IsPlayer ? 6 : -6; //todo sono in viaggio scusa
+        var ballPosition = new Vector3(GetRandomNumber(range, range+2), 4, -3);
         var ballScriptable = ResourceSystem.Instance.GetBalls(ballType);
         var toSpawn = Instantiate(ballScriptable.prefab, ballPosition, Quaternion.identity);
+        toSpawn.IsPlayer = IsPlayer;
         _inGameObjects.Add(toSpawn.gameObject);
     }
 

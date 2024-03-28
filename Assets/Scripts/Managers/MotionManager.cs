@@ -8,6 +8,7 @@ public class MotionManager : Singleton<MotionManager>
     public QuadraticCurve  PlayerCurve;
     public QuadraticCurve  EnemyCurve;
     public float           CurrentTime;
+    public float           CurrentTimeEnemy;
     public float           Speed = 1f; // todo needed?
 
     public bool            IsPlayerBallInMotion;
@@ -35,21 +36,22 @@ public class MotionManager : Singleton<MotionManager>
         if (IsPlayerBall) IsPlayerBallInMotion = true;
         else IsEnemyBallInMotion = true;
         var d = Vector3.Distance(curve.StartingPoint, curve.FinalPoint);
+        var time = IsPlayerBall ? CurrentTime : CurrentTimeEnemy;
         while ( d >= 0.5)
         {
-            CurrentTime  += Time.deltaTime;
-            ball.position = curve.Evaluate(CurrentTime);
-            ball.forward  = curve.Evaluate(CurrentTime + 0.001f) - ball.position;
+            time += Time.deltaTime;
+            ball.position = curve.Evaluate(time);
+            ball.forward  = curve.Evaluate(time + 0.001f) - ball.position;
 
             d = Vector3.Distance(ball.transform.position, curve.FinalPoint);
             yield return null;
         }
 
-        CurrentTime = 0f;
+        time = 0f;
         if (IsPlayerBall)
         {
             IsPlayerBallInMotion = false;
-            if (GameManager.Instance.Game_variables.currentShoot == ShootType.BoardShoot)
+            if (GameManager.Instance.Game_variables.currentShoot == ShootType.BoardShoot )
             {
                 ball.GetComponent<BallBase>().SimulatePhysicsMode();
             }
@@ -60,6 +62,7 @@ public class MotionManager : Singleton<MotionManager>
         {
             //todo end motion to take physics
             IsEnemyBallInMotion = false;
+            ball.GetComponent<BallBase>().SimulatePhysicsMode();
         }
     }
 

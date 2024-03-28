@@ -78,16 +78,19 @@ public class GameManager : Singleton<GameManager>
         SwipeManager.Instance.Setup();
 
         Coroutine swipeAgainCoroutine = null;
-        var activeBall = InstanceManager.Instance._inGameObjects.Where(go => go.GetComponent<NormalBall>() != null).
-            FirstOrDefault()?.GetComponent<NormalBall>();
+        var playerBall = InstanceManager.Instance.GetBall(IsPlayer:true);
+        var enemyBall = InstanceManager.Instance.GetBall(IsPlayer:false);
+        playerBall.name = "Playerball";
+        enemyBall.name = "Enemyball";
         CanvasManager.Instance.SetupFillBar();
-        activeBall.OnScoreUpdate += OnScoreUpdated;
-        activeBall.OnResetBall += HandleSparkingBoard;
+        playerBall.OnScoreUpdate += OnScoreUpdated;
+        playerBall.OnResetBall += HandleSparkingBoard;
 
         
-        while (Game_variables.elapsedTime < PLAYER_TURN_TIME || !activeBall.IsReady)
+        while (Game_variables.elapsedTime < PLAYER_TURN_TIME || !playerBall.IsReady)
         {
-            activeBall.StartingPosition = new Vector3(GetRandomNumber(-7, 7), 4, -3);
+            playerBall.StartingPosition = new Vector3(GetRandomNumber(-7, -5), 4, -3);
+            enemyBall.StartingPosition = new Vector3(GetRandomNumber(-6, -4), 4, -3);
             // Increment the elapsed time by the time passed since the last frame
             Game_variables.elapsedTime += Time.deltaTime;
             CanvasManager.Instance.Canvas.SetTime((int)(PLAYER_TURN_TIME - Game_variables.elapsedTime));
@@ -100,10 +103,10 @@ public class GameManager : Singleton<GameManager>
                 Game_variables.currentShoot = GetShootType(normalizedValue);
                 var finalPosition = GetFinalPosition(Game_variables.currentShoot, normalizedValue);
                 SetThrowHeight(Game_variables.currentShoot, normalizedValue);
-                if (activeBall.IsReady)
+                if (playerBall.IsReady)
                 {
-                    activeBall.Setup();
-                    MotionManager.Instance.Setup(activeBall.transform.position, finalPosition, isPlayerBall:true);
+                    playerBall.Setup();
+                    MotionManager.Instance.Setup(playerBall.transform.position, finalPosition, isPlayerBall:true);
                     if(!MotionManager.Instance.IsPlayerBallInMotion)
                         MotionManager.Instance.StartMotion(IsPlayerBall: true);
                 }
@@ -111,12 +114,24 @@ public class GameManager : Singleton<GameManager>
                 // Then start again
                 swipeAgainCoroutine = StartCoroutine(SwipeManager.Instance.CanSwipeAgain());
             }
+            // Enemy ball behaviour
+            
+            if (enemyBall.IsReady)
+            {
+                var shoot = GetRandomShootType();
+                var finalPositionEnemy = GetFinalPosition(shoot, 0.5f); // todo 0.5 togliere
+                enemyBall.Setup();
+                MotionManager.Instance.Setup(enemyBall.transform.position, finalPositionEnemy, isPlayerBall: false);
+                if (!MotionManager.Instance.IsEnemyBallInMotion)
+                    MotionManager.Instance.StartMotion(IsPlayerBall: false);
+            }
+
             yield return new WaitForEndOfFrame();
         }
         swipeAgainCoroutine = null;
         // Go to next state
-        activeBall.OnScoreUpdate -= OnScoreUpdated;
-        activeBall.OnResetBall -= HandleSparkingBoard;
+        playerBall.OnScoreUpdate -= OnScoreUpdated;
+        playerBall.OnResetBall -= HandleSparkingBoard;
         HandleSparkingBoard(true);
         ChangeState(GameState.End);
     }
