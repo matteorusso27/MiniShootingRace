@@ -9,7 +9,7 @@ public class BallBase : MonoBehaviour
     public delegate void ScoreUpdateEventHandler();
     public event ScoreUpdateEventHandler OnScoreUpdate;
 
-    public delegate void ResetBallHandler(bool isForced = false);
+    public delegate void ResetBallHandler();
     public event ResetBallHandler OnResetBall;
     public enum BallState
     {
@@ -83,7 +83,6 @@ public class BallBase : MonoBehaviour
             encounteredTriggers++;
             if (encounteredTriggers == 2)
             {
-                Debug.Log("update score encountered");
                 OnScoreUpdate?.Invoke();
             }
         }

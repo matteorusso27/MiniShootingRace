@@ -14,7 +14,11 @@ public class Canvas : MonoBehaviour
     public Image            FillMarker;
     public Image            PerfectRange;
     public Image            BoardRange;
-    public TMP_Text         Score;
+    public TMP_Text         PlayerScore;
+    public TMP_Text         EnemyScore;
+    public TMP_Text         FinalText;
+    public TMP_Text         CountDown;
+    public Button           RestartBtn;
 
     public void SetText(string text)
     {
@@ -28,7 +32,7 @@ public class Canvas : MonoBehaviour
 
     public void SetTime(int t)
     {
-        playerTurnCountDown.text = t.ToString();
+        playerTurnCountDown.text = "Time: "+t.ToString();
     }
 
     public void SetFillBar(float value)
@@ -39,5 +43,13 @@ public class Canvas : MonoBehaviour
     public void SetGameState(string t) => gameState.text = t;
     public void SetBallState(string t) => ballState.text = t;
 
-    public void SetScore(int s) => Score.text = "Score: "+s.ToString();
+    public void SetPlayerScore(int s) => PlayerScore.text = "P Score: "+s.ToString();
+    public void SetEnemyScore(int s) => EnemyScore.text = "E Score: "+s.ToString();
+    public void SetFinalText(string s)
+    {
+        FinalText.transform.gameObject.SetActive(true);
+        FinalText.text = s;
+    }
+
+    public void SetCountDownTxt(string c) => CountDown.text = c;
 }

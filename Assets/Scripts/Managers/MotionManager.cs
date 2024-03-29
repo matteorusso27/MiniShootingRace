@@ -51,7 +51,7 @@ public class MotionManager : Singleton<MotionManager>
         if (IsPlayerBall)
         {
             IsPlayerBallInMotion = false;
-            if (GameManager.Instance.Game_variables.currentShoot == ShootType.BoardShoot )
+            if (GameManager.Instance.gameData.currentPlayerShoot == ShootType.BoardShoot )
             {
                 ball.GetComponent<BallBase>().SimulatePhysicsMode();
             }

@@ -14,15 +14,17 @@ public class GameManager : Singleton<GameManager>
     public bool IsPlayerTurn() { return State == GameState.PlayerTurn; }
 
     #region GAME VARIABLES
-    public struct GameVariables
+    public struct GameData
     {
-        public int currentScore; //todo add a score manager?
-        public float elapsedTime;
-        public ShootType currentShoot;
+        public int playerScore; 
+        public int enemyScore; 
+        public ShootType currentPlayerShoot;
+        public ShootType currentEnemyShoot;
         public bool isBoardSparking;
+        public float elapsedPlayerTime;
     }
 
-    public GameVariables Game_variables;
+    public GameData gameData;
     #endregion
 
     void Start()
@@ -54,11 +56,19 @@ public class GameManager : Singleton<GameManager>
 
         OnAfterStateChanged?.Invoke(newState);
     }
-
+    private void Init()
+    {
+        gameData.playerScore = 0;
+        gameData.enemyScore = 0;
+        CanvasManager.Instance.Canvas.SetPlayerScore(0);
+        CanvasManager.Instance.Canvas.SetEnemyScore(0);
+        CanvasManager.Instance.Canvas.FinalText.transform.gameObject.SetActive(false);
+        CanvasManager.Instance.Canvas.RestartBtn.transform.gameObject.SetActive(false);
+        CanvasManager.Instance.Canvas.CountDown.transform.gameObject.SetActive(true);
+    }
     private void HandleStart()
     {
-        // Do things
-
+        Init();
         // Go to next state
         ChangeState(GameState.SpawningPlayer);
     }
@@ -74,7 +84,19 @@ public class GameManager : Singleton<GameManager>
 
     private IEnumerator HandlePlayerTurn()
     {
-        Game_variables.elapsedTime = 0f;
+        IEnumerator StartCountDown()
+        {
+            for (int countDownTime = 3; countDownTime > 0; countDownTime--)
+            {
+                CanvasManager.Instance.Canvas.SetCountDownTxt(countDownTime.ToString());
+                yield return new WaitForSeconds(1f);
+            }
+            CanvasManager.Instance.Canvas.SetCountDownTxt("Start!");
+            yield return new WaitForSeconds(1f);
+            CanvasManager.Instance.Canvas.CountDown.transform.gameObject.SetActive(false);
+        }
+        yield return StartCountDown();
+        gameData.elapsedPlayerTime = 0f;
         SwipeManager.Instance.Setup();
 
         Coroutine swipeAgainCoroutine = null;
@@ -83,26 +105,27 @@ public class GameManager : Singleton<GameManager>
         playerBall.name = "Playerball";
         enemyBall.name = "Enemyball";
         CanvasManager.Instance.SetupFillBar();
-        playerBall.OnScoreUpdate += OnScoreUpdated;
+        playerBall.OnScoreUpdate += OnPlayerScoreUpdated;
+        enemyBall.OnScoreUpdate += OnEnemyScoreUpdated;
         playerBall.OnResetBall += HandleSparkingBoard;
 
         
-        while (Game_variables.elapsedTime < PLAYER_TURN_TIME || !playerBall.IsReady)
+        while (gameData.elapsedPlayerTime < PLAYER_TURN_TIME || !playerBall.IsReady)
         {
             playerBall.StartingPosition = new Vector3(GetRandomNumber(-7, -5), 4, -3);
             enemyBall.StartingPosition = new Vector3(GetRandomNumber(-6, -4), 4, -3);
             // Increment the elapsed time by the time passed since the last frame
-            Game_variables.elapsedTime += Time.deltaTime;
-            CanvasManager.Instance.Canvas.SetTime((int)(PLAYER_TURN_TIME - Game_variables.elapsedTime));
+            gameData.elapsedPlayerTime += Time.deltaTime;
+            CanvasManager.Instance.Canvas.SetTime((int)(PLAYER_TURN_TIME - gameData.elapsedPlayerTime));
 
             if (SwipeManager.Instance.SwipeIsMeasured)
             {
                 // todo Add if ball animation is playing (avoid this loop multiple times)
                 //if (activeBall.IsInParabolicMovement) continue;
                 var normalizedValue = SwipeManager.Instance.normalizedDistance;
-                Game_variables.currentShoot = GetShootType(normalizedValue);
-                var finalPosition = GetFinalPosition(Game_variables.currentShoot, normalizedValue);
-                SetThrowHeight(Game_variables.currentShoot, normalizedValue);
+                gameData.currentPlayerShoot = GetShootType(normalizedValue);
+                var finalPosition = GetFinalPosition(gameData.currentPlayerShoot, normalizedValue);
+                SetThrowHeight(gameData.currentPlayerShoot, normalizedValue);
                 if (playerBall.IsReady)
                 {
                     playerBall.Setup();
@@ -130,9 +153,9 @@ public class GameManager : Singleton<GameManager>
         }
         swipeAgainCoroutine = null;
         // Go to next state
-        playerBall.OnScoreUpdate -= OnScoreUpdated;
+        playerBall.OnScoreUpdate -= OnPlayerScoreUpdated;
+        enemyBall.OnScoreUpdate -= OnEnemyScoreUpdated;
         playerBall.OnResetBall -= HandleSparkingBoard;
-        HandleSparkingBoard(true);
         ChangeState(GameState.End);
     }
 
@@ -140,8 +163,15 @@ public class GameManager : Singleton<GameManager>
     {
         yield return new WaitForSeconds(0.1f);
         // Go to next state
-      
-        ChangeState(GameState.PlayerTurn);
+        string s;
+        if (gameData.playerScore > gameData.enemyScore)
+            s = "You Win";
+        else if (gameData.playerScore < gameData.enemyScore)
+            s = "You lose";
+        else
+            s = "Tie";
+        CanvasManager.Instance.Canvas.SetFinalText(s);
+        CanvasManager.Instance.Canvas.RestartBtn.transform.gameObject.SetActive(true);
     }
 
     public enum GameState
@@ -152,21 +182,30 @@ public class GameManager : Singleton<GameManager>
         End = 3
     }
 
-    private void HandleSparkingBoard(bool disable = false)
+    private void HandleSparkingBoard()
     {
-        bool toChange;
-        if (disable == true)
-            toChange = false;
-        else
-            toChange = Game_variables.elapsedTime >= SPARKING_BOARD_TIME;
+        var toChange = gameData.elapsedPlayerTime >= SPARKING_BOARD_TIME;
         var board = GameObject.FindGameObjectWithTag(StringTag(GameTag.Board));
         board.GetComponent<MeshRenderer>().enabled = toChange;
-        Game_variables.isBoardSparking = toChange;
+        gameData.isBoardSparking = toChange;
     }
-    public void OnScoreUpdated()
+    public void OnPlayerScoreUpdated()
     {
-        var score = GetScore(Game_variables.currentShoot, Game_variables.isBoardSparking);
-        Game_variables.currentScore += score;
-        CanvasManager.Instance.Canvas.SetScore(Game_variables.currentScore);
+        var score = GetScore(gameData.currentPlayerShoot, gameData.isBoardSparking);
+        gameData.playerScore += score;
+        CanvasManager.Instance.Canvas.SetPlayerScore(gameData.playerScore);
+    }
+    
+    public void OnEnemyScoreUpdated()
+    {
+        var score = GetScore(gameData.currentEnemyShoot, gameData.isBoardSparking);
+        gameData.enemyScore += score;
+        CanvasManager.Instance.Canvas.SetEnemyScore(gameData.enemyScore);
+    }
+
+    public void OnRestartingGame()
+    {
+        Init();
+        ChangeState(GameState.PlayerTurn);
     }
 }

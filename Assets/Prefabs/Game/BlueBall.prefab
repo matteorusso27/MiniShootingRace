@@ -110,3 +110,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd3ab44ce28675f448ff500addb3c5ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsPlayer: 0
+  State: 0
+  startingPosition: {x: 0, y: 0, z: 0}
