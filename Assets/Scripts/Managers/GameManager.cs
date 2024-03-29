@@ -112,7 +112,7 @@ public class GameManager : Singleton<GameManager>
         
         while (gameData.elapsedPlayerTime < PLAYER_TURN_TIME || !playerBall.IsReady)
         {
-            playerBall.StartingPosition = new Vector3(GetRandomNumber(-7, -5), 4, -3);
+            playerBall.StartingPosition = new Vector3(GetRandomNumber(6, 8), 4, -3);
             enemyBall.StartingPosition = new Vector3(GetRandomNumber(-6, -4), 4, -3);
             // Increment the elapsed time by the time passed since the last frame
             gameData.elapsedPlayerTime += Time.deltaTime;
