@@ -2595,6 +2595,7 @@ MonoBehaviour:
   PlayerScore: {fileID: 605427030}
   EnemyScore: {fileID: 683833992}
   FinalText: {fileID: 1777859330}
+  CountDown: {fileID: 1973365493}
   RestartBtn: {fileID: 1964442471}
 --- !u!1 &1777859328
 GameObject:
@@ -2629,11 +2630,11 @@ RectTransform:
   m_Father: {fileID: 1729147216}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -1440, y: -1307}
-  m_SizeDelta: {x: 1440, y: 404.5058}
-  m_Pivot: {x: 0, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 1440, y: 404.50586}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1777859330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3086,11 +3087,11 @@ RectTransform:
   m_Father: {fileID: 1729147216}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -1440, y: -1307}
-  m_SizeDelta: {x: 1440, y: 404.5058}
-  m_Pivot: {x: 0, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 1440, y: 404.50586}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1973365493
 MonoBehaviour:
   m_ObjectHideFlags: 0

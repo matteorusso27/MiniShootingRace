@@ -47,23 +47,10 @@ public class MotionManager : Singleton<MotionManager>
             yield return null;
         }
 
-        time = 0f;
-        if (IsPlayerBall)
-        {
-            IsPlayerBallInMotion = false;
-            if (GameManager.Instance.gameData.currentPlayerShoot == ShootType.BoardShoot )
-            {
-                ball.GetComponent<BallBase>().SimulatePhysicsMode();
-            }
-            else
-                ball.GetComponent<BallBase>().StartReset();
-        }
-        else
-        {
-            //todo end motion to take physics
-            IsEnemyBallInMotion = false;
-            ball.GetComponent<BallBase>().SimulatePhysicsMode();
-        }
+        if (IsPlayerBall) IsPlayerBallInMotion = false;
+        else IsEnemyBallInMotion = false;
+        
+        ball.GetComponent<BallBase>().SimulatePhysicsMode();
     }
 
     public GameObject GetBall(bool IsPlayerBall) => IsPlayerBall ? Balls[0] : Balls[1];
