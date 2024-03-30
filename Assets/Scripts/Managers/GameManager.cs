@@ -158,7 +158,7 @@ public class GameManager : Singleton<GameManager>
     private IEnumerator HandleEnd()
     {
         var playerBall = InstanceManager.Instance.GetBall(IsPlayer: true);
-        var enemyBall = InstanceManager.Instance.GetBall(IsPlayer: true);
+        var enemyBall = InstanceManager.Instance.GetBall(IsPlayer: false);
         if (playerBall.IsInMovement)
             yield return new WaitForSeconds(4f);
 
