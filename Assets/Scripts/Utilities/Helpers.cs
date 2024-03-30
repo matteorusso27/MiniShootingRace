@@ -4,18 +4,17 @@ using UnityEngine;
 
 public static class Helpers
 {
-    public static float     TIME_TO_SWIPE = 1.5f;
-    public static float     PLAYER_TURN_TIME = 15f;
+    public static float     TIME_TO_SWIPE = 0.75f;
+    public static float     PLAYER_TURN_TIME = 3f;
     public static float     GRAVITY = 9.81f;
     public static float     MIN_SWIPE = 0.2f;
-    public static float     RANGES_DISTANCE = 0.2f;
-
+    public static float     RANGES_DISTANCE = 0.2f; //Distance between perfect range and board range
+    public static int       COUNTDOWN = 3;
     public static float     SPARKING_BOARD_TIME = PLAYER_TURN_TIME / 2f;
 
     #region ScorePoints
     public static int       PERFECT_SHOOT_SCORE = 3;
     public static int       REGULAR_SHOOT_SCORE = 2;
-    public static int       BOARD_SPARKING_SHOOT_SCORE = 8;
     #endregion
 
     public static Vector3   HOOP_POSITION = new Vector3(0.27f, 7.62f, 5.92f);
@@ -28,6 +27,7 @@ public static class Helpers
     public static float THROW_HEIGHT = 15f;
     public static System.Random RANDOM = new System.Random();
 
+    #region TAGS
     public enum GameTag
     {
         Terrain,
@@ -38,6 +38,7 @@ public static class Helpers
 
     public static string StringTag(GameTag t) => t.ToString();
 
+    #endregion
     public static int GetScore(ShootType shootType, bool isBoardSparking)
     {
         switch (shootType)

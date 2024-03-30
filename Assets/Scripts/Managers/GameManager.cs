@@ -22,6 +22,7 @@ public class GameManager : Singleton<GameManager>
         public ShootType currentEnemyShoot;
         public bool isBoardSparking;
         public float elapsedPlayerTime;
+        public bool isBallReady;
     }
 
     public GameData gameData;
@@ -86,7 +87,7 @@ public class GameManager : Singleton<GameManager>
     {
         IEnumerator StartCountDown()
         {
-            for (int countDownTime = 3; countDownTime > 0; countDownTime--)
+            for (int countDownTime = COUNTDOWN; countDownTime > 0; countDownTime--)
             {
                 CanvasManager.Instance.Canvas.SetCountDownTxt(countDownTime.ToString());
                 yield return new WaitForSeconds(1f);
@@ -109,18 +110,15 @@ public class GameManager : Singleton<GameManager>
         enemyBall.OnScoreUpdate += OnEnemyScoreUpdated;
         playerBall.OnResetBall += HandleSparkingBoard;
 
-        
-        while (gameData.elapsedPlayerTime < PLAYER_TURN_TIME || !playerBall.IsReady)
+        while (gameData.elapsedPlayerTime < PLAYER_TURN_TIME)
         {
             playerBall.StartingPosition = new Vector3(GetRandomNumber(6, 8), 4, -3);
             enemyBall.StartingPosition = new Vector3(GetRandomNumber(-6, -4), 4, -3);
             gameData.elapsedPlayerTime += Time.deltaTime;
             CanvasManager.Instance.Canvas.SetTime((int)(PLAYER_TURN_TIME - gameData.elapsedPlayerTime));
-
+            gameData.isBallReady = playerBall.IsReady;
             if (SwipeManager.Instance.SwipeIsMeasured)
             {
-                // todo Add if ball animation is playing (avoid this loop multiple times)
-                //if (activeBall.IsInParabolicMovement) continue;
                 if (playerBall.IsReady)
                 {
                     var normalizedValue = SwipeManager.Instance.normalizedDistance;
@@ -131,7 +129,6 @@ public class GameManager : Singleton<GameManager>
                     MotionManager.Instance.Setup(playerBall.transform.position, finalPosition, isPlayerBall:true);
                     MotionManager.Instance.StartMotion(IsPlayerBall: true);
                 }
-                
                 // Then start again
                 swipeAgainCoroutine = StartCoroutine(SwipeManager.Instance.CanSwipeAgain());
             }
@@ -150,7 +147,7 @@ public class GameManager : Singleton<GameManager>
         }
         swipeAgainCoroutine = null;
         // Go to next state
-        playerBall.OnScoreUpdate -= OnPlayerScoreUpdated;
+        
         enemyBall.OnScoreUpdate -= OnEnemyScoreUpdated;
         playerBall.OnResetBall -= HandleSparkingBoard;
         ChangeState(GameState.End);
@@ -158,8 +155,15 @@ public class GameManager : Singleton<GameManager>
 
     private IEnumerator HandleEnd()
     {
-        yield return new WaitForSeconds(0.1f);
-        // Go to next state
+        var playerBall = InstanceManager.Instance.GetBall(IsPlayer: true);
+        var enemyBall = InstanceManager.Instance.GetBall(IsPlayer: true);
+        if (playerBall.IsInMovement)
+            yield return new WaitForSeconds(4f);
+
+        //Release delegate subscriptions
+        playerBall.OnScoreUpdate -= OnPlayerScoreUpdated;
+        enemyBall.OnScoreUpdate -= OnEnemyScoreUpdated;
+
         string s;
         if (gameData.playerScore > gameData.enemyScore)
             s = "You Win";

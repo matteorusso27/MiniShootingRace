@@ -41,16 +41,16 @@ public class SwipeManager : Singleton<SwipeManager>
         ChangeSwipeState(SwipeState.WaitForSwipeDetection);
     }
 
-    public bool CanMeasureSwipe => State == SwipeState.SwipeDetection;
+    public bool CanMeasureSwipe => State == SwipeState.SwipeDetection && GameManager.Instance.gameData.isBallReady;
     public bool SwipeIsMeasured => State == SwipeState.SwipeMeasured;
 
     public void Setup()
     {
+        normalizedDistance = 0f;
         CanvasManager.Instance.Canvas.SetFillBar(normalizedDistance);
         CanvasManager.Instance.Canvas.SetText(normalizedDistance.ToString());
         ChangeSwipeState(SwipeState.SwipeDetection);
         CanvasManager.Instance.Canvas.SetSwipeStateText(State.ToString());
-        normalizedDistance = 0f;
     }
     private void OnSwipe(string swipe)
     {
