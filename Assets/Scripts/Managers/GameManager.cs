@@ -16,13 +16,13 @@ public class GameManager : Singleton<GameManager>
     #region GAME VARIABLES
     public struct GameData
     {
-        public int playerScore; 
-        public int enemyScore; 
-        public ShootType currentPlayerShoot;
-        public ShootType currentEnemyShoot;
-        public bool isBoardSparking;
-        public float elapsedPlayerTime;
-        public bool isBallReady;
+        public int PlayerScore; 
+        public int EnemyScore; 
+        public ShootType CurrentPlayerShoot;
+        public ShootType CurrentEnemyShoot;
+        public bool IsBoardSparking;
+        public float ElapsedPlayerTime;
+        public bool IsBallReady;
     }
 
     public GameData gameData;
@@ -59,8 +59,8 @@ public class GameManager : Singleton<GameManager>
     }
     private void Init()
     {
-        gameData.playerScore = 0;
-        gameData.enemyScore = 0;
+        gameData.PlayerScore = 0;
+        gameData.EnemyScore = 0;
         CanvasManager.Instance.Canvas.SetPlayerScore(0);
         CanvasManager.Instance.Canvas.SetEnemyScore(0);
         CanvasManager.Instance.Canvas.FinalText.transform.gameObject.SetActive(false);
@@ -97,7 +97,7 @@ public class GameManager : Singleton<GameManager>
             CanvasManager.Instance.Canvas.CountDown.transform.gameObject.SetActive(false);
         }
         
-        gameData.elapsedPlayerTime = 0f;
+        gameData.ElapsedPlayerTime = 0f;
         SwipeManager.Instance.Setup();
 
         Coroutine swipeAgainCoroutine = null;
@@ -112,21 +112,21 @@ public class GameManager : Singleton<GameManager>
         CameraManager.Instance.Init(playerBall.transform);
         yield return StartCountDown();
 
-        while (gameData.elapsedPlayerTime < PLAYER_TURN_TIME)
+        while (gameData.ElapsedPlayerTime < PLAYER_TURN_TIME)
         {
             playerBall.StartingPosition = new Vector3(GetRandomNumber(6, 8), 4, -3);
             enemyBall.StartingPosition = new Vector3(GetRandomNumber(-6, -4), 4, -3);
-            gameData.elapsedPlayerTime += Time.deltaTime;
-            CanvasManager.Instance.Canvas.SetTime((int)(PLAYER_TURN_TIME - gameData.elapsedPlayerTime));
-            gameData.isBallReady = playerBall.IsReady;
+            gameData.ElapsedPlayerTime += Time.deltaTime;
+            CanvasManager.Instance.Canvas.SetTime((int)(PLAYER_TURN_TIME - gameData.ElapsedPlayerTime));
+            gameData.IsBallReady = playerBall.IsReady;
             if (SwipeManager.Instance.SwipeIsMeasured)
             {
                 if (playerBall.IsReady)
                 {
                     var normalizedValue = SwipeManager.Instance.normalizedDistance;
-                    gameData.currentPlayerShoot = GetShootType(normalizedValue);
-                    var finalPosition = GetFinalPosition(gameData.currentPlayerShoot, normalizedValue);
-                    SetThrowHeight(gameData.currentPlayerShoot, normalizedValue);
+                    gameData.CurrentPlayerShoot = GetShootType(normalizedValue);
+                    var finalPosition = GetFinalPosition(gameData.CurrentPlayerShoot, normalizedValue);
+                    SetThrowHeight(gameData.CurrentPlayerShoot, normalizedValue);
                     playerBall.SetupMotionValues();
                     MotionManager.Instance.Setup(playerBall.transform.position, finalPosition, isPlayerBall:true);
                     MotionManager.Instance.StartMotion(IsPlayerBall: true);
@@ -167,9 +167,9 @@ public class GameManager : Singleton<GameManager>
         enemyBall.OnScoreUpdate -= OnEnemyScoreUpdated;
 
         string s;
-        if (gameData.playerScore > gameData.enemyScore)
+        if (gameData.PlayerScore > gameData.EnemyScore)
             s = "You Win";
-        else if (gameData.playerScore < gameData.enemyScore)
+        else if (gameData.PlayerScore < gameData.EnemyScore)
             s = "You lose";
         else
             s = "Tie";
@@ -188,24 +188,24 @@ public class GameManager : Singleton<GameManager>
     private void OnBallReset()
     {
         // Check if board need to be highlighted
-        var toChange = gameData.elapsedPlayerTime >= SPARKING_BOARD_TIME;
+        var toChange = gameData.ElapsedPlayerTime >= SPARKING_BOARD_TIME;
         var board = GameObject.FindGameObjectWithTag(StringTag(GameTag.Board));
         board.GetComponent<MeshRenderer>().enabled = toChange;
-        gameData.isBoardSparking = toChange;
+        gameData.IsBoardSparking = toChange;
         CameraManager.Instance.Camera.m_Lens.FieldOfView = DEFAULT_FOV;
     }
     public void OnPlayerScoreUpdated()
     {
-        var score = GetScore(gameData.currentPlayerShoot, gameData.isBoardSparking);
-        gameData.playerScore += score;
-        CanvasManager.Instance.Canvas.SetPlayerScore(gameData.playerScore);
+        var score = GetScore(gameData.CurrentPlayerShoot, gameData.IsBoardSparking);
+        gameData.PlayerScore += score;
+        CanvasManager.Instance.Canvas.SetPlayerScore(gameData.PlayerScore);
     }
     
     public void OnEnemyScoreUpdated()
     {
-        var score = GetScore(gameData.currentEnemyShoot, gameData.isBoardSparking);
-        gameData.enemyScore += score;
-        CanvasManager.Instance.Canvas.SetEnemyScore(gameData.enemyScore);
+        var score = GetScore(gameData.CurrentEnemyShoot, gameData.IsBoardSparking);
+        gameData.EnemyScore += score;
+        CanvasManager.Instance.Canvas.SetEnemyScore(gameData.EnemyScore);
     }
 
     public void OnRestartingGame()

@@ -41,7 +41,7 @@ public class SwipeManager : Singleton<SwipeManager>
         ChangeSwipeState(SwipeState.WaitForSwipeDetection);
     }
 
-    public bool CanMeasureSwipe => State == SwipeState.SwipeDetection && GameManager.Instance.gameData.isBallReady;
+    public bool CanMeasureSwipe => State == SwipeState.SwipeDetection && GameManager.Instance.gameData.IsBallReady;
     public bool SwipeIsMeasured => State == SwipeState.SwipeMeasured;
 
     public void Setup()
