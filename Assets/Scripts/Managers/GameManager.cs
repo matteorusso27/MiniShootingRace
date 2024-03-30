@@ -121,16 +121,15 @@ public class GameManager : Singleton<GameManager>
             {
                 // todo Add if ball animation is playing (avoid this loop multiple times)
                 //if (activeBall.IsInParabolicMovement) continue;
-                var normalizedValue = SwipeManager.Instance.normalizedDistance;
-                gameData.currentPlayerShoot = GetShootType(normalizedValue);
-                var finalPosition = GetFinalPosition(gameData.currentPlayerShoot, normalizedValue);
-                SetThrowHeight(gameData.currentPlayerShoot, normalizedValue);
                 if (playerBall.IsReady)
                 {
-                    playerBall.Setup();
+                    var normalizedValue = SwipeManager.Instance.normalizedDistance;
+                    gameData.currentPlayerShoot = GetShootType(normalizedValue);
+                    var finalPosition = GetFinalPosition(gameData.currentPlayerShoot, normalizedValue);
+                    SetThrowHeight(gameData.currentPlayerShoot, normalizedValue);
+                    playerBall.SetupMotionValues();
                     MotionManager.Instance.Setup(playerBall.transform.position, finalPosition, isPlayerBall:true);
-                    if(!MotionManager.Instance.IsPlayerBallInMotion)
-                        MotionManager.Instance.StartMotion(IsPlayerBall: true);
+                    MotionManager.Instance.StartMotion(IsPlayerBall: true);
                 }
                 
                 // Then start again

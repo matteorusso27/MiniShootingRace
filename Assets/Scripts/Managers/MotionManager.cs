@@ -20,9 +20,15 @@ public class MotionManager : Singleton<MotionManager>
         Balls = InstanceManager.Instance.GetBalls().Select(x=> x.gameObject).ToArray();
 
         if (isPlayerBall)
+        {
             PlayerCurve = new QuadraticCurve(startingPoint, finalPoint);
+            IsPlayerBallInMotion = false;
+        }
         else
+        {
             EnemyCurve = new QuadraticCurve(startingPoint, finalPoint);
+            IsEnemyBallInMotion = false;
+        }
     }
 
     public void StartMotion(bool IsPlayerBall)
