@@ -36,7 +36,7 @@ public class BallBase : MonoBehaviour
     }
     public void ChangeState(BallState newState) => State = newState;
     
-    public void Setup()
+    public void SetupMotionValues()
     {
         rb.isKinematic = true;
         rb.useGravity = false;
@@ -64,7 +64,6 @@ public class BallBase : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        //todo maybe remove
         if (collision.gameObject.CompareTag(StringTag(GameTag.Board)))
         {
             SimulatePhysicsMode();

@@ -114,7 +114,6 @@ public class GameManager : Singleton<GameManager>
         {
             playerBall.StartingPosition = new Vector3(GetRandomNumber(6, 8), 4, -3);
             enemyBall.StartingPosition = new Vector3(GetRandomNumber(-6, -4), 4, -3);
-            // Increment the elapsed time by the time passed since the last frame
             gameData.elapsedPlayerTime += Time.deltaTime;
             CanvasManager.Instance.Canvas.SetTime((int)(PLAYER_TURN_TIME - gameData.elapsedPlayerTime));
 
@@ -138,12 +137,11 @@ public class GameManager : Singleton<GameManager>
                 swipeAgainCoroutine = StartCoroutine(SwipeManager.Instance.CanSwipeAgain());
             }
             // Enemy ball behaviour
-            
             if (enemyBall.IsReady)
             {
                 var shoot = GetRandomShootType();
                 var finalPositionEnemy = GetFinalPosition(shoot, 0.5f); // todo 0.5 togliere
-                enemyBall.Setup();
+                enemyBall.SetupMotionValues();
                 MotionManager.Instance.Setup(enemyBall.transform.position, finalPositionEnemy, isPlayerBall: false);
                 if (!MotionManager.Instance.IsEnemyBallInMotion)
                     MotionManager.Instance.StartMotion(IsPlayerBall: false);

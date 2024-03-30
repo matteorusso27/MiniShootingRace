@@ -57,12 +57,10 @@ public class SwipeManager : Singleton<SwipeManager>
         // Only process swipe if measurement is allowed
         if (!CanMeasureSwipe) return;
 
-        // Check for downward swipe
         if (swipe.Equals("Down"))
         {
             OnSwipeCancelled();
         }
-        // Initialize starting point and start swipe detection coroutine
         if (startingPointY == -1) // todo change to delegate that subscribes to first swipe interaction
         {
             startingPointY = swipeListener._swipePoint.y;
@@ -97,9 +95,6 @@ public class SwipeManager : Singleton<SwipeManager>
             UpdateSwipeParameters();
             UpdateUI();
         }
-
-        if (Input.GetKeyDown(KeyCode.Space)) //todo, remove, debug purposes
-            Setup();
     }
 
     private void UpdateSwipeParameters()
@@ -135,7 +130,6 @@ public class SwipeManager : Singleton<SwipeManager>
         if (!SwipeIsMeasured) EndSwipingPhase();
     }
 
-    //todo, needed?
     public IEnumerator CanSwipeAgain()
     {
         // Wait to allow swipe measurement again
