@@ -7,7 +7,7 @@ public class MotionManager : Singleton<MotionManager>
 {
     public QuadraticCurve  PlayerCurve;
     public QuadraticCurve  EnemyCurve;
-    public float           CurrentTime;
+    public float           CurrentPlayerTime;
     public float           CurrentTimeEnemy;
     public float           Speed = 1f; // todo needed?
 
@@ -42,7 +42,7 @@ public class MotionManager : Singleton<MotionManager>
         if (IsPlayerBall) IsPlayerBallInMotion = true;
         else IsEnemyBallInMotion = true;
         var d = Vector3.Distance(curve.StartingPoint, curve.FinalPoint);
-        var time = IsPlayerBall ? CurrentTime : CurrentTimeEnemy;
+        var time = IsPlayerBall ? CurrentPlayerTime : CurrentTimeEnemy;
         while ( d >= 0.5)
         {
             time += Time.deltaTime;
