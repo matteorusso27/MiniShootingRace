@@ -96,7 +96,7 @@ public class GameManager : Singleton<GameManager>
             yield return new WaitForSeconds(1f);
             CanvasManager.Instance.Canvas.CountDown.transform.gameObject.SetActive(false);
         }
-        yield return StartCountDown();
+        
         gameData.elapsedPlayerTime = 0f;
         SwipeManager.Instance.Setup();
 
@@ -109,6 +109,8 @@ public class GameManager : Singleton<GameManager>
         playerBall.OnScoreUpdate += OnPlayerScoreUpdated;
         enemyBall.OnScoreUpdate += OnEnemyScoreUpdated;
         playerBall.OnResetBall += HandleSparkingBoard;
+        CameraManager.Instance.Init(playerBall.transform);
+        yield return StartCountDown();
 
         while (gameData.elapsedPlayerTime < PLAYER_TURN_TIME)
         {

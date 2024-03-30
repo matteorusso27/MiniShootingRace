@@ -5,7 +5,7 @@ using UnityEngine;
 public static class Helpers
 {
     public static float     TIME_TO_SWIPE = 0.75f;
-    public static float     PLAYER_TURN_TIME = 3f;
+    public static float     PLAYER_TURN_TIME = 180f;
     public static float     GRAVITY = 9.81f;
     public static float     MIN_SWIPE = 0.2f;
     public static float     RANGES_DISTANCE = 0.2f; //Distance between perfect range and board range
@@ -33,7 +33,8 @@ public static class Helpers
         Terrain,
         Board,
         HoopTriggers,
-        TriggerGravity
+        TriggerGravity,
+        VirtualCamera
     }
 
     public static string StringTag(GameTag t) => t.ToString();
