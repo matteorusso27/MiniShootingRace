@@ -43,6 +43,7 @@ public class MotionManager : Singleton<MotionManager>
         else IsEnemyBallInMotion = true;
         var d = Vector3.Distance(curve.StartingPoint, curve.FinalPoint);
         var time = IsPlayerBall ? CurrentPlayerTime : CurrentTimeEnemy;
+        var cameraFOV = CameraManager.Instance.Camera.m_Lens.FieldOfView;
         while ( d >= 0.5)
         {
             time += Time.deltaTime;
@@ -50,6 +51,9 @@ public class MotionManager : Singleton<MotionManager>
             ball.forward  = curve.Evaluate(time + 0.001f) - ball.position;
 
             d = Vector3.Distance(ball.transform.position, curve.FinalPoint);
+
+            if(IsPlayerBall)
+                CameraManager.Instance.Camera.m_Lens.FieldOfView = Mathf.Lerp(cameraFOV, CAMERA_FOV, time);
             yield return null;
         }
 

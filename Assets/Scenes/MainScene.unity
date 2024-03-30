@@ -1327,7 +1327,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 5000
-  field of view: 38.3
+  field of view: 40
   orthographic: 0
   orthographic size: 10
   m_Depth: -1
@@ -1608,7 +1608,7 @@ GameObject:
   - component: {fileID: 1087242127}
   m_Layer: 0
   m_Name: Cinemachine_Camera
-  m_TagString: Untagged
+  m_TagString: VirtualCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1634,7 +1634,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 0}
   m_Lens:
-    FieldOfView: 38.3
+    FieldOfView: 40
     OrthographicSize: 10
     NearClipPlane: 0.1
     FarClipPlane: 5000
@@ -1912,7 +1912,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64b30b03931407c4fa63b85d544fae3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentTime: 0
+  CurrentPlayerTime: 0
   CurrentTimeEnemy: 0
   Speed: 2
   IsPlayerBallInMotion: 0

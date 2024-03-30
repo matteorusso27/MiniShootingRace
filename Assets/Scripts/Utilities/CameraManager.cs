@@ -11,6 +11,7 @@ public class CameraManager : Singleton<CameraManager>
     {
         if (Camera == null)
             Camera = GameObject.FindGameObjectWithTag(StringTag(GameTag.VirtualCamera)).GetComponent<CinemachineVirtualCamera>();
+        Camera.m_Lens.FieldOfView = DEFAULT_FOV;
         Camera.LookAt = go;
     }
 }

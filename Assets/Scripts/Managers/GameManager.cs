@@ -108,7 +108,7 @@ public class GameManager : Singleton<GameManager>
         CanvasManager.Instance.SetupFillBar();
         playerBall.OnScoreUpdate += OnPlayerScoreUpdated;
         enemyBall.OnScoreUpdate += OnEnemyScoreUpdated;
-        playerBall.OnResetBall += HandleSparkingBoard;
+        playerBall.OnResetBall += OnBallReset;
         CameraManager.Instance.Init(playerBall.transform);
         yield return StartCountDown();
 
@@ -151,7 +151,7 @@ public class GameManager : Singleton<GameManager>
         // Go to next state
         
         enemyBall.OnScoreUpdate -= OnEnemyScoreUpdated;
-        playerBall.OnResetBall -= HandleSparkingBoard;
+        playerBall.OnResetBall -= OnBallReset;
         ChangeState(GameState.End);
     }
 
@@ -185,12 +185,14 @@ public class GameManager : Singleton<GameManager>
         End = 3
     }
 
-    private void HandleSparkingBoard()
+    private void OnBallReset()
     {
+        // Check if board need to be highlighted
         var toChange = gameData.elapsedPlayerTime >= SPARKING_BOARD_TIME;
         var board = GameObject.FindGameObjectWithTag(StringTag(GameTag.Board));
         board.GetComponent<MeshRenderer>().enabled = toChange;
         gameData.isBoardSparking = toChange;
+        CameraManager.Instance.Camera.m_Lens.FieldOfView = DEFAULT_FOV;
     }
     public void OnPlayerScoreUpdated()
     {

@@ -9,8 +9,14 @@ public static class Helpers
     public static float     GRAVITY = 9.81f;
     public static float     MIN_SWIPE = 0.2f;
     public static float     RANGES_DISTANCE = 0.2f; //Distance between perfect range and board range
-    public static int       COUNTDOWN = 3;
     public static float     SPARKING_BOARD_TIME = PLAYER_TURN_TIME / 2f;
+    public static float     ENEMY_SHOOT_FREQUENCY = 1.5f;
+    public static int       COUNTDOWN = 3;
+
+    #region Camera
+    public static float     CAMERA_FOV = 24f;
+    public static float     DEFAULT_FOV = 40f;
+    #endregion
 
     #region ScorePoints
     public static int       PERFECT_SHOOT_SCORE = 3;
@@ -18,7 +24,7 @@ public static class Helpers
     #endregion
 
     public static Vector3   HOOP_POSITION = new Vector3(0.27f, 7.62f, 5.92f);
-    public static Vector3   BOARD_HIT_POSITION = new Vector3(0.43f, 10f, 6.35f);
+    public static Vector3   BOARD_HIT_POSITION = new Vector3(0.43f, 10f, 5.88f);
     public static Vector3   MISS_BOARD_HIT_POSITION = new Vector3(3.43f, 10f, 6.35f);
     public static Vector3   LOW_THROW_POSITION = new Vector3(0.43f, 0f, 2.35f);
     public static Vector3   HIGH_THROW_POSITION = new Vector3(0f, 0f, 20);
