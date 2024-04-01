@@ -66,6 +66,7 @@ public class GameManager : Singleton<GameManager>
         CanvasManager.Instance.Canvas.FinalText.transform.gameObject.SetActive(false);
         CanvasManager.Instance.Canvas.RestartBtn.transform.gameObject.SetActive(false);
         CanvasManager.Instance.Canvas.CountDown.transform.gameObject.SetActive(true);
+        SwipeManager.Instance.Setup();
     }
     private void HandleStart()
     {

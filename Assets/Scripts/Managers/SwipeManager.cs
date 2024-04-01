@@ -20,7 +20,7 @@ public class SwipeManager : Singleton<SwipeManager>
         SwipeDetection,
         SwipeMeasured
     }
-    public SwipeState State { get; private set; }
+    public SwipeState State;
     public void ChangeSwipeState(SwipeState newState)
     {
         State = newState;

@@ -2,38 +2,46 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Helpers;
 public class Player : CharacterBase
 {
-    private bool canMove;
-    private void Awake() => GameManager.OnBeforeStateChanged += OnStateChanged;
-    private void OnDestroy() => GameManager.OnAfterStateChanged -= OnStateChanged;
+    private Animator    animator;
+    private Rigidbody   rigbody;
+    private float       jumpForce = 30f;
+    private bool        isJumpingAnimation;
 
-    private void OnStateChanged(GameManager.GameState newState)
+    private void Awake()
     {
-        if (newState == GameManager.GameState.PlayerTurn)
-            canMove = true;
-        else
-            canMove = false;
+        animator = GetComponent<Animator>();
+        rigbody = GetComponent<Rigidbody>();
+    }
+    public void Start()
+    {
+        animator.Play("Dribble");
     }
 
-    private void OnMouseDown()
+    public void OnShoot()
     {
-        if (GameManager.Instance.State != GameManager.GameState.PlayerTurn) return;
-        if (!canMove)
+        rigbody.AddForce(jumpForce * Vector3.up, ForceMode.Force);
+        animator.Play("Jump");
+        isJumpingAnimation = true;
+    }
+
+    private void Update()
+    {
+        //transform.LookAt(HOOP_POSITION, Vector3.up);
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log("you cannot move");
-            return;
+            OnShoot();
         }
-
-        Debug.Log("Clicked");
-    }
-    public virtual void ExecuteMove()
-    {
-        canMove = false;
     }
 
-    public void Update()
+    private void OnCollisionEnter(Collision collision)
     {
-        if (!canMove) return;
+        return;
+        if(isJumpingAnimation && collision.gameObject.CompareTag(StringTag(GameTag.Terrain)))
+        {
+            animator.Play("Dribble");
+        }
     }
 }

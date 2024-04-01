@@ -740,7 +740,7 @@ Light:
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -2007,7 +2007,7 @@ Light:
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -2823,7 +2823,7 @@ Light:
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -4970,7 +4970,7 @@ Light:
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -6552,7 +6552,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tmpPro: {fileID: 1063327919}
-  fillBarBkg: {fileID: 0}
   fillBar: {fileID: 1560593481}
   swipeState: {fileID: 531664937}
   gameState: {fileID: 262130166}
@@ -7099,7 +7098,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1919370388
 Transform:
   m_ObjectHideFlags: 0
@@ -8631,6 +8630,7 @@ MonoBehaviour:
   startingPointY: -1
   normalizedDistance: 0
   maxSwipeDistance: 0
+  State: 0
 --- !u!33 &345739530518825311
 MeshFilter:
   m_ObjectHideFlags: 0
