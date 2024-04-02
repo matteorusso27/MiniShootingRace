@@ -5,8 +5,9 @@ using UnityEngine.UI;
 using TMPro;
 public class Canvas : MonoBehaviour
 {
+    //todo clean, they were made for debug purposes
     public TMP_Text         tmpPro;
-    public Image            fillBar;
+    public Image            FillBar;
     public TMP_Text         swipeState;
     public TMP_Text         gameState;
     public TMP_Text         playerTurnCountDown;
@@ -20,6 +21,10 @@ public class Canvas : MonoBehaviour
     public TMP_Text         FinalText;
     public TMP_Text         CountDown;
     public Button           RestartBtn;
+
+    public float PerfectRangeHeight => PerfectRange.rectTransform.rect.height;
+    public float BoardRangeHeight => BoardRange.rectTransform.rect.height;
+    public float FillBarHeight => FillBar.rectTransform.rect.height;
 
     public void SetText(string text)
     {
@@ -38,7 +43,7 @@ public class Canvas : MonoBehaviour
 
     public void SetFillBar(float value)
     {
-        fillBar.fillAmount = value;
+        FillBar.fillAmount = value;
     }
 
     public void SetGameState(string t) => gameState.text = t;

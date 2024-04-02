@@ -4581,7 +4581,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1202329013
 PrefabInstance:
@@ -5001,7 +5001,7 @@ Transform:
   - {fileID: 1087242126}
   - {fileID: 582151655}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 5.708, y: 0, z: 0}
 --- !u!1 &1314265402
 GameObject:
@@ -5141,7 +5141,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17318075950e58943ae8b3ff14f5ee07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _inGameObjects: []
+  SceneObjects: []
 --- !u!1 &1339020159
 GameObject:
   m_ObjectHideFlags: 0
@@ -6463,7 +6463,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1689881370
 PrefabInstance:
@@ -6793,7 +6793,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tmpPro: {fileID: 1063327919}
-  fillBar: {fileID: 1560593481}
+  FillBar: {fileID: 1560593481}
   swipeState: {fileID: 531664937}
   gameState: {fileID: 262130166}
   playerTurnCountDown: {fileID: 85260838}
@@ -9041,7 +9041,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6645339249357177376, guid: 5e4d2059ebbffec40adbacdf04147804, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6645339249357177376, guid: 5e4d2059ebbffec40adbacdf04147804, type: 3}
       propertyPath: m_LocalPosition.x

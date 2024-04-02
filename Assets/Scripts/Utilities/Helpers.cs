@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class Helpers
 {
-    public static float     TIME_TO_SWIPE = 0.75f;
+    public static float     TIME_TO_SWIPE = 0.25f;
     public static float     PLAYER_TURN_TIME = 30f;
     public static float     GRAVITY = 9.81f;
     public static float     MIN_SWIPE = 0.2f;
@@ -12,8 +12,6 @@ public static class Helpers
     public static float     SPARKING_BOARD_TIME = PLAYER_TURN_TIME / 2f;
     public static float     ENEMY_SHOOT_FREQUENCY = 1.5f;
     public static int       COUNTDOWN = 1;
-    public static int       STREAK = 1;
-    public static int       FIRE_TIMER = 3;
     public static float     ENERGY_BAR_FILL = 0.5f;
     #region Camera
     public static float     CAMERA_FOV = 24f;
@@ -155,5 +153,5 @@ public static class Helpers
         #endregion
     }
 
-    public static bool IsPlayerBallOfType(BallType balltype) => GameManager.Instance.gameData.PlayerBall.BallType == balltype;
+    public static bool IsPlayerBallOfType(BallType balltype) => GameManager.Instance.Data.PlayerBall.BallType == balltype;
 }

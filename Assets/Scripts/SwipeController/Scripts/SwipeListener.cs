@@ -5,9 +5,7 @@ using UnityEngine.Events ;
 
 namespace GG.Infrastructure.Utils.Swipe {
    [Serializable]
-   public class SwipeListenerEvent : UnityEvent<string> {
-
-   }
+   public class SwipeListenerEvent : UnityEvent<string> {}
 
     public class SwipeListener : MonoBehaviour
     {
@@ -35,7 +33,7 @@ namespace GG.Infrastructure.Utils.Swipe {
             set
             {
                 sensitivity = value;
-                UpdateSensetivity();
+                UpdateSensitivity();
             }
         }
 
@@ -48,7 +46,7 @@ namespace GG.Infrastructure.Utils.Swipe {
 
         private void Start()
         {
-            UpdateSensetivity();
+            UpdateSensitivity();
 
             if (SwipeDetectionMode != SwipeDetectionMode.Custom)
             {
@@ -56,7 +54,7 @@ namespace GG.Infrastructure.Utils.Swipe {
             }
         }
 
-        private void UpdateSensetivity()
+        private void UpdateSensitivity()
         {
             _minMoveDistance = Screen.height / sensitivity;
         }

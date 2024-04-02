@@ -8,27 +8,27 @@ using System.Linq;
 
 public class InstanceManager : Singleton<InstanceManager>
 {
-    public List<GameObject> _inGameObjects;
+    public List<GameObject> SceneObjects;
 
     public void Start()
     {
-        _inGameObjects = new List<GameObject>();
+        SceneObjects = new List<GameObject>();
     }
 
     public BallBase[] GetBalls()
     {
-        return InstanceManager.Instance._inGameObjects.Where(x => x.GetComponent<BallBase>() != null).Select(x=> x.GetComponent<BallBase>()).ToArray();
+        return SceneObjects.Where(x => x.GetComponent<BallBase>() != null).Select(x=> x.GetComponent<BallBase>()).ToArray();
     }
 
     public BallBase GetBall(bool IsPlayer) => GetBalls().Where(x => x.IsPlayer == IsPlayer).FirstOrDefault();
-    public void SpawnPlayerAndBall()
+    public void SpawnPlayerAndBalls()
     {
         SpawnPlayer(EntityType.Player);
         SpawnBall(BallType.NormalBall, IsPlayer: true);
         SpawnBall(BallType.NormalBall, IsPlayer: false);
     }
 
-    public BallBase SpawnBall(BallType ballType, bool IsPlayer)
+    public void SpawnBall(BallType ballType, bool IsPlayer)
     {
         var range = IsPlayer ? 6 : -6; //todo sono in viaggio scusa
         var ballPosition = new Vector3(GetRandomNumber(range, range+2), 4, -3);
@@ -36,8 +36,7 @@ public class InstanceManager : Singleton<InstanceManager>
         var toSpawn = Instantiate(ballScriptable.prefab, ballPosition, Quaternion.identity);
         toSpawn.BallType = ballType;
         toSpawn.IsPlayer = IsPlayer;
-        _inGameObjects.Add(toSpawn.gameObject);
-        return toSpawn;
+        SceneObjects.Add(toSpawn.gameObject);
     }
 
     private void SpawnPlayer(EntityType player)
@@ -46,11 +45,6 @@ public class InstanceManager : Singleton<InstanceManager>
         var characterScriptable = ResourceSystem.Instance.GetCharacters(player);
         var toSpawn = Instantiate(characterScriptable.prefab, characterPosition, Quaternion.identity);
         toSpawn.StreakPoints = 0;
-        _inGameObjects.Add(toSpawn.gameObject);
-    }
-
-    public void RemoveBall(GameObject go)
-    {
-        _inGameObjects.Remove(go);
+        SceneObjects.Add(toSpawn.gameObject);
     }
 }

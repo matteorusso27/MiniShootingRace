@@ -2,6 +2,7 @@ using GG.Infrastructure.Utils.Swipe;
 using System.Collections;
 using UnityEngine;
 using static Helpers;
+using static GameSelectors;
 
 public class SwipeManager : Singleton<SwipeManager>
 {
@@ -12,8 +13,10 @@ public class SwipeManager : Singleton<SwipeManager>
     public float startingPointY = -1;
     public float normalizedDistance;
     public float maxSwipeDistance;
+    
+    // Coroutine reference for swipe detection timeout
+    private Coroutine swipeCoroutine;
 
-    // State
     public enum SwipeState
     {
         WaitForSwipeDetection,
@@ -26,10 +29,6 @@ public class SwipeManager : Singleton<SwipeManager>
         State = newState;
     }
 
-    // Coroutine reference for swipe detection timeout
-    // todo, needed?
-    private Coroutine swipeCoroutine;
-
     private void OnEnable()
     {
         // Subscribe to swipe events
@@ -38,19 +37,20 @@ public class SwipeManager : Singleton<SwipeManager>
 
         screenHeight = Screen.height;
         maxSwipeDistance = screenHeight / 2;
+        //todo add minswipedistance
         ChangeSwipeState(SwipeState.WaitForSwipeDetection);
     }
 
-    public bool CanMeasureSwipe => State == SwipeState.SwipeDetection && GameManager.Instance.gameData.IsBallReady;
+    public bool CanMeasureSwipe => State == SwipeState.SwipeDetection && GameM.Data.IsBallReady;
     public bool SwipeIsMeasured => State == SwipeState.SwipeMeasured;
 
     public void Setup()
     {
         normalizedDistance = 0f;
-        CanvasManager.Instance.Canvas.SetFillBar(normalizedDistance);
-        CanvasManager.Instance.Canvas.SetText(normalizedDistance.ToString());
+        CanvasM.Canvas.SetFillBar(normalizedDistance);
+        CanvasM.Canvas.SetText(normalizedDistance.ToString());
+        CanvasM.Canvas.SetSwipeStateText(State.ToString());
         ChangeSwipeState(SwipeState.SwipeDetection);
-        CanvasManager.Instance.Canvas.SetSwipeStateText(State.ToString());
     }
     private void OnSwipe(string swipe)
     {
@@ -84,7 +84,7 @@ public class SwipeManager : Singleton<SwipeManager>
         startingPointY = -1;
         swipeCoroutine = null; 
         ChangeSwipeState(SwipeState.SwipeMeasured);
-        CanvasManager.Instance.Canvas.SetSwipeStateText(State.ToString());
+        CanvasM.Canvas.SetSwipeStateText(State.ToString());
     }
 
     private void Update()
@@ -107,11 +107,11 @@ public class SwipeManager : Singleton<SwipeManager>
     private void UpdateUI()
     {
         // Update UI with swipe distance
-        CanvasManager.Instance.Canvas.SetText("D: " + normalizedDistance.ToString());
-        CanvasManager.Instance.Canvas.SetFillBar(normalizedDistance);
-        CanvasManager.Instance.Canvas.SetSwipeStateText(State.ToString());
-        var markerPositionY = CanvasManager.Instance.Canvas.fillBar.rectTransform.rect.height * normalizedDistance;
-        CanvasManager.Instance.Canvas.FillMarker.rectTransform.anchoredPosition = new Vector3(0, markerPositionY, 0);
+        CanvasM.Canvas.SetText("D: " + normalizedDistance.ToString());
+        CanvasM.Canvas.SetFillBar(normalizedDistance);
+        CanvasM.Canvas.SetSwipeStateText(State.ToString());
+        var markerPositionY = CanvasM.Canvas.FillBarHeight * normalizedDistance;
+        CanvasM.Canvas.FillMarker.rectTransform.anchoredPosition = new Vector3(0, markerPositionY, 0);
     }
 
     private void OnDisable()

@@ -1,16 +1,17 @@
 using System.Collections;
 using UnityEngine;
 using static Helpers;
+using static GameSelectors;
 public class BallBase : MonoBehaviour
 {
-    // For score updates
-    private int encounteredTriggers = 0;
-
     public delegate void ScoreUpdateEventHandler();
     public event ScoreUpdateEventHandler OnScoreUpdate;
 
     public delegate void ResetBallHandler();
     public event ResetBallHandler OnResetBall;
+
+    // For score updates
+    private int encounteredTriggers = 0;
     public enum BallState
     {
         Ready,
@@ -22,7 +23,7 @@ public class BallBase : MonoBehaviour
 
     public bool IsPlayer;
     public BallState State;
-    private float rotationSpeed = 200f;
+    private float RotationSpeed = 200f;
 
     public bool IsReady => State == BallState.Ready;
     public bool IsGrounded => State == BallState.Grounded;
@@ -47,17 +48,19 @@ public class BallBase : MonoBehaviour
 
     private void Update()
     {
-        CanvasManager.Instance.Canvas.SetBallState(State.ToString()); //todo remove
+        CanvasM.Canvas.SetBallState(State.ToString()); //todo remove
         if (IsGrounded) return;
         HandleRotation();
     }
 
     private void HandleRotation()
     {
-        float rotationAngleX = rotationSpeed * Time.deltaTime;
+        float rotationAngleX = RotationSpeed * Time.deltaTime;
         transform.Rotate(rotationAngleX, 0f, 0f);
     }
 
+    // Ball movement is split in a deterministic parabolic movement
+    // and a simulation of physics until it touches the ground
     public void SimulatePhysicsMode()
     {
         rb.isKinematic = false;
@@ -79,6 +82,7 @@ public class BallBase : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        // To score the ball needs to touch both triggers
         if (other.gameObject.CompareTag(StringTag(GameTag.HoopTriggers)))
         {
             encounteredTriggers++;
@@ -90,10 +94,11 @@ public class BallBase : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
+        // todo remove?
         if (other.gameObject.CompareTag(StringTag(GameTag.HoopTriggers)))
         {
-            rb.isKinematic = false;
-            rb.useGravity = true;
+           //rb.isKinematic = false;
+           //rb.useGravity = true;
         }
     }
 
@@ -104,7 +109,7 @@ public class BallBase : MonoBehaviour
     }
     public IEnumerator ResetBall()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.3f);
         ChangeState(BallState.Ready);
         transform.position = StartingPosition;
         rb.isKinematic = true;

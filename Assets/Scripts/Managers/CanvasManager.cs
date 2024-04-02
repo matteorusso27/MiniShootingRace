@@ -22,26 +22,32 @@ public class CanvasManager : Singleton<CanvasManager>
         // between {2,3,4,5}
         var numb = GetRandomNumber(2, difficulty);
         START_RANGE_PERFECT_SHOOT = (1f / numb);
-        END_RANGE_PERFECT_SHOOT = START_RANGE_PERFECT_SHOOT + Canvas.PerfectRange.rectTransform.rect.height / Canvas.fillBar.rectTransform.rect.height;
+        END_RANGE_PERFECT_SHOOT = START_RANGE_PERFECT_SHOOT + Canvas.PerfectRangeHeight / Canvas.FillBarHeight;
 
         START_RANGE_BOARD_SHOOT = START_RANGE_PERFECT_SHOOT + RANGES_DISTANCE;
-        END_RANGE_BOARD_SHOOT = START_RANGE_BOARD_SHOOT + Canvas.BoardRange.rectTransform.rect.height / Canvas.fillBar.rectTransform.rect.height;
+        END_RANGE_BOARD_SHOOT = START_RANGE_BOARD_SHOOT + Canvas.BoardRangeHeight / Canvas.FillBarHeight;
     }
 
     public void DrawRanges()
     {
-        var startingPerfectRangePositionY = Canvas.fillBar.rectTransform.rect.height * START_RANGE_PERFECT_SHOOT;
+        var startingPerfectRangePositionY = Canvas.FillBarHeight * START_RANGE_PERFECT_SHOOT;
         Canvas.PerfectRange.rectTransform.anchoredPosition = new Vector3(0, startingPerfectRangePositionY, 0);
 
-        var startingBoardRangePositionY = Canvas.fillBar.rectTransform.rect.height * START_RANGE_BOARD_SHOOT;
+        var startingBoardRangePositionY = Canvas.FillBarHeight * START_RANGE_BOARD_SHOOT;
         Canvas.BoardRange.rectTransform.anchoredPosition = new Vector3(0, startingBoardRangePositionY, 0);
     }
 
     public void FillEnergyBar()
     {
         var currentAmount = Canvas.EnergyBar.fillAmount;
-        if (currentAmount >= 1) return;
-        Canvas.EnergyBar.fillAmount += ENERGY_BAR_FILL;
+        if (currentAmount >= 1)
+        {
+            SetEnergyBar(1f);
+        }
+        else
+        {
+            Canvas.EnergyBar.fillAmount += ENERGY_BAR_FILL;
+        } 
     }
 
     public void SetEnergyBar(float amount)

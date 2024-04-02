@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using static Helpers;
+using static GameSelectors;
 public class MotionManager : Singleton<MotionManager>
 {
     public QuadraticCurve  PlayerCurve;
@@ -17,7 +18,7 @@ public class MotionManager : Singleton<MotionManager>
    
     public void Setup(Vector3 startingPoint, Vector3 finalPoint, bool isPlayerBall)
     {
-        Balls = InstanceManager.Instance.GetBalls().Select(x=> x.gameObject).ToArray();
+        Balls = InstanceM.GetBalls().Select(x=> x.gameObject).ToArray();
 
         if (isPlayerBall)
         {
@@ -39,12 +40,18 @@ public class MotionManager : Singleton<MotionManager>
     public IEnumerator ParabolicMotion(QuadraticCurve curve, bool IsPlayerBall)
     {
         Transform ball = GetBall(IsPlayerBall).transform;
-        if (IsPlayerBall) IsPlayerBallInMotion = true;
-        else IsEnemyBallInMotion = true;
+        if (IsPlayerBall)
+        {
+            IsPlayerBallInMotion = true;
+        }
+        else
+        {
+            IsEnemyBallInMotion = true;
+        }
         var d = Vector3.Distance(curve.StartingPoint, curve.FinalPoint);
         var time = IsPlayerBall ? CurrentPlayerTime : CurrentTimeEnemy;
-        var cameraFOV = CameraManager.Instance.Camera.m_Lens.FieldOfView;
-        while ( d >= 0.5)
+        var cameraFOV = CameraM.Camera.m_Lens.FieldOfView;
+        while ( d >= 0.5f)
         {
             time += Time.deltaTime;
             ball.position = curve.Evaluate(time);
@@ -52,8 +59,10 @@ public class MotionManager : Singleton<MotionManager>
 
             d = Vector3.Distance(ball.transform.position, curve.FinalPoint);
 
-            if(IsPlayerBall)
-                CameraManager.Instance.Camera.m_Lens.FieldOfView = Mathf.Lerp(cameraFOV, CAMERA_FOV, time);
+            if (IsPlayerBall)
+            {
+                CameraM.Camera.m_Lens.FieldOfView = Mathf.Lerp(cameraFOV, CAMERA_FOV, time);
+            }
             yield return null;
         }
 
