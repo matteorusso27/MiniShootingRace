@@ -14,6 +14,7 @@ public class Canvas : MonoBehaviour
     public Image            FillMarker;
     public Image            PerfectRange;
     public Image            BoardRange;
+    public Image            EnergyBar;
     public TMP_Text         PlayerScore;
     public TMP_Text         EnemyScore;
     public TMP_Text         FinalText;

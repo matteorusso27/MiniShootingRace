@@ -23,6 +23,9 @@ public class GameManager : Singleton<GameManager>
         public bool IsBoardSparking;
         public float ElapsedPlayerTime;
         public bool IsBallReady;
+        public int  CurrentPlayerStreak;
+        public BallBase PlayerBall;
+        public BallBase EnemyBall;
     }
 
     public GameData gameData;
@@ -102,46 +105,58 @@ public class GameManager : Singleton<GameManager>
         SwipeManager.Instance.Setup();
 
         Coroutine swipeAgainCoroutine = null;
-        var playerBall = InstanceManager.Instance.GetBall(IsPlayer:true);
-        var enemyBall = InstanceManager.Instance.GetBall(IsPlayer:false);
-        playerBall.name = "Playerball";
-        enemyBall.name = "Enemyball";
+        gameData.PlayerBall = InstanceManager.Instance.GetBall(IsPlayer:true);
+        gameData.EnemyBall = InstanceManager.Instance.GetBall(IsPlayer:false);
+        gameData.PlayerBall.name = "Playerball";
+        gameData.EnemyBall.name = "Enemyball";
         CanvasManager.Instance.SetupFillBar();
-        playerBall.OnScoreUpdate += OnPlayerScoreUpdated;
-        enemyBall.OnScoreUpdate += OnEnemyScoreUpdated;
-        playerBall.OnResetBall += OnBallReset;
-        CameraManager.Instance.Init(playerBall.transform);
+        gameData.PlayerBall.OnScoreUpdate += OnPlayerScoreUpdated;
+        gameData.EnemyBall.OnScoreUpdate += OnEnemyScoreUpdated;
+        gameData.PlayerBall.OnResetBall += OnBallReset;
+        CameraManager.Instance.Init(gameData.PlayerBall.transform);
         yield return StartCountDown();
 
         while (gameData.ElapsedPlayerTime < PLAYER_TURN_TIME)
         {
-            playerBall.StartingPosition = new Vector3(GetRandomNumber(6, 8), 4, -3);
-            enemyBall.StartingPosition = new Vector3(GetRandomNumber(-6, -4), 4, -3);
+            gameData.PlayerBall.StartingPosition = new Vector3(GetRandomNumber(6, 8), 4, -3);
+            gameData.EnemyBall.StartingPosition = new Vector3(GetRandomNumber(-6, -4), 4, -3);
             gameData.ElapsedPlayerTime += Time.deltaTime;
             CanvasManager.Instance.Canvas.SetTime((int)(PLAYER_TURN_TIME - gameData.ElapsedPlayerTime));
-            gameData.IsBallReady = playerBall.IsReady;
+            gameData.IsBallReady = gameData.PlayerBall.IsReady;
             if (SwipeManager.Instance.SwipeIsMeasured)
             {
-                if (playerBall.IsReady)
+                if (gameData.PlayerBall.IsReady)
                 {
                     var normalizedValue = SwipeManager.Instance.normalizedDistance;
                     gameData.CurrentPlayerShoot = GetShootType(normalizedValue);
+                    if (IsScoreShoot(gameData.CurrentPlayerShoot))
+                    {
+                        gameData.CurrentPlayerStreak++;
+                        CanvasManager.Instance.FillEnergyBar();
+                        if (CanvasManager.Instance.GetEnergyBarFill() == 1f)
+                            StartCoroutine(FireBall());
+                    }
+                    else 
+                    {
+                        gameData.CurrentPlayerStreak = 0;
+                    }
+
                     var finalPosition = GetFinalPosition(gameData.CurrentPlayerShoot, normalizedValue);
                     SetThrowHeight(gameData.CurrentPlayerShoot, normalizedValue);
-                    playerBall.SetupMotionValues();
-                    MotionManager.Instance.Setup(playerBall.transform.position, finalPosition, isPlayerBall:true);
+                    gameData.PlayerBall.SetupMotionValues();
+                    MotionManager.Instance.Setup(gameData.PlayerBall.transform.position, finalPosition, isPlayerBall:true);
                     MotionManager.Instance.StartMotion(IsPlayerBall: true);
                 }
                 // Then start again
                 swipeAgainCoroutine = StartCoroutine(SwipeManager.Instance.CanSwipeAgain());
             }
             // Enemy ball behaviour
-            if (enemyBall.IsReady)
+            if (gameData.EnemyBall.IsReady)
             {
                 var shoot = GetRandomShootType();
                 var finalPositionEnemy = GetFinalPosition(shoot, 0.5f); // todo 0.5 togliere
-                enemyBall.SetupMotionValues();
-                MotionManager.Instance.Setup(enemyBall.transform.position, finalPositionEnemy, isPlayerBall: false);
+                gameData.EnemyBall.SetupMotionValues();
+                MotionManager.Instance.Setup(gameData.EnemyBall.transform.position, finalPositionEnemy, isPlayerBall: false);
                 if (!MotionManager.Instance.IsEnemyBallInMotion)
                     MotionManager.Instance.StartMotion(IsPlayerBall: false);
             }
@@ -150,22 +165,21 @@ public class GameManager : Singleton<GameManager>
         }
         swipeAgainCoroutine = null;
         // Go to next state
-        
-        enemyBall.OnScoreUpdate -= OnEnemyScoreUpdated;
-        playerBall.OnResetBall -= OnBallReset;
+
+        gameData.EnemyBall.OnScoreUpdate -= OnEnemyScoreUpdated;
+        gameData.PlayerBall.OnResetBall -= OnBallReset;
+        gameData.CurrentPlayerStreak = 0;
         ChangeState(GameState.End);
     }
 
     private IEnumerator HandleEnd()
     {
-        var playerBall = InstanceManager.Instance.GetBall(IsPlayer: true);
-        var enemyBall = InstanceManager.Instance.GetBall(IsPlayer: false);
-        if (playerBall.IsInMovement)
+        if (gameData.PlayerBall.IsInMovement)
             yield return new WaitForSeconds(4f);
 
         //Release delegate subscriptions
-        playerBall.OnScoreUpdate -= OnPlayerScoreUpdated;
-        enemyBall.OnScoreUpdate -= OnEnemyScoreUpdated;
+        gameData.PlayerBall.OnScoreUpdate -= OnPlayerScoreUpdated;
+        gameData.EnemyBall.OnScoreUpdate -= OnEnemyScoreUpdated;
 
         string s;
         if (gameData.PlayerScore > gameData.EnemyScore)
@@ -194,11 +208,22 @@ public class GameManager : Singleton<GameManager>
         board.GetComponent<MeshRenderer>().enabled = toChange;
         gameData.IsBoardSparking = toChange;
         CameraManager.Instance.Camera.m_Lens.FieldOfView = DEFAULT_FOV;
+
+        if (gameData.CurrentPlayerStreak >= STREAK && !IsPlayerBallOfType(BallType.FireBall))
+        {
+            ChangePlayerBallTo(BallType.FireBall);
+        }
+        if (IsPlayerBallOfType(BallType.FireBall) && gameData.CurrentPlayerStreak < STREAK)
+        {
+            ChangePlayerBallTo(BallType.NormalBall);
+        }
     }
     public void OnPlayerScoreUpdated()
     {
         var score = GetScore(gameData.CurrentPlayerShoot, gameData.IsBoardSparking);
         gameData.PlayerScore += score;
+        if (gameData.PlayerBall.BallType == BallType.FireBall)
+            score *= 2;
         CanvasManager.Instance.Canvas.SetPlayerScore(gameData.PlayerScore);
     }
     
@@ -213,5 +238,27 @@ public class GameManager : Singleton<GameManager>
     {
         Init();
         ChangeState(GameState.PlayerTurn);
+    }
+
+    public void ChangePlayerBallTo(BallType type)
+    {
+        var path = type == BallType.NormalBall ? "Materials/NormalBallMat" : "Materials/FireBallMat";
+        var mat = Resources.Load(path, typeof(Material)) as Material;
+        gameData.PlayerBall.gameObject.GetComponent<MeshRenderer>().material = mat;
+        gameData.PlayerBall.BallType = type;
+    }
+
+    public IEnumerator FireBall()
+    {
+        var time = 0f;
+        //Debug.Log(CanvasManager.Instance.GetEnergyBarFill());
+        while (CanvasManager.Instance.GetEnergyBarFill() > 0)
+        {
+            //Debug.Log(CanvasManager.Instance.GetEnergyBarFill());
+            time += Time.deltaTime * 0.001f;
+            CanvasManager.Instance.SetEnergyBar(CanvasManager.Instance.GetEnergyBarFill() - time);
+            yield return null;
+        }
+        ChangePlayerBallTo(BallType.NormalBall);
     }
 }

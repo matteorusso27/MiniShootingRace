@@ -28,14 +28,16 @@ public class InstanceManager : Singleton<InstanceManager>
         SpawnBall(BallType.NormalBall, IsPlayer: false);
     }
 
-    public void SpawnBall(BallType ballType, bool IsPlayer)
+    public BallBase SpawnBall(BallType ballType, bool IsPlayer)
     {
         var range = IsPlayer ? 6 : -6; //todo sono in viaggio scusa
         var ballPosition = new Vector3(GetRandomNumber(range, range+2), 4, -3);
         var ballScriptable = ResourceSystem.Instance.GetBalls(ballType);
         var toSpawn = Instantiate(ballScriptable.prefab, ballPosition, Quaternion.identity);
+        toSpawn.BallType = ballType;
         toSpawn.IsPlayer = IsPlayer;
         _inGameObjects.Add(toSpawn.gameObject);
+        return toSpawn;
     }
 
     private void SpawnPlayer(EntityType player)
@@ -43,9 +45,12 @@ public class InstanceManager : Singleton<InstanceManager>
         var characterPosition = new Vector3(1, 3, 0);
         var characterScriptable = ResourceSystem.Instance.GetCharacters(player);
         var toSpawn = Instantiate(characterScriptable.prefab, characterPosition, Quaternion.identity);
-        var stats = characterScriptable.BaseStats;
-        stats.Score = 0;
-        toSpawn.SetStats(stats);
+        toSpawn.StreakPoints = 0;
         _inGameObjects.Add(toSpawn.gameObject);
+    }
+
+    public void RemoveBall(GameObject go)
+    {
+        _inGameObjects.Remove(go);
     }
 }

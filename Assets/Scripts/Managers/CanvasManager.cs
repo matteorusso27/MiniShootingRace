@@ -36,4 +36,18 @@ public class CanvasManager : Singleton<CanvasManager>
         var startingBoardRangePositionY = Canvas.fillBar.rectTransform.rect.height * START_RANGE_BOARD_SHOOT;
         Canvas.BoardRange.rectTransform.anchoredPosition = new Vector3(0, startingBoardRangePositionY, 0);
     }
+
+    public void FillEnergyBar()
+    {
+        var currentAmount = Canvas.EnergyBar.fillAmount;
+        if (currentAmount >= 1) return;
+        Canvas.EnergyBar.fillAmount += ENERGY_BAR_FILL;
+    }
+
+    public void SetEnergyBar(float amount)
+    {
+        Canvas.EnergyBar.fillAmount = amount;
+    }
+
+    public float GetEnergyBarFill() => Canvas.EnergyBar.fillAmount;
 }

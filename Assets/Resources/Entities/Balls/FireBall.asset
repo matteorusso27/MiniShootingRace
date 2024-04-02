@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: FireBall
   m_EditorClassIdentifier: 
   Ball: 1
-  prefab: {fileID: 3339933537023756282, guid: 0dd35d4683278114ba4ab1e96fe4aa97, type: 3}
+  prefab: {fileID: 3974671560630182961, guid: 0dd35d4683278114ba4ab1e96fe4aa97, type: 3}

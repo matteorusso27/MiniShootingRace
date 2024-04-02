@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6374074910453525064}
   - component: {fileID: 2212935159279561417}
   - component: {fileID: 3974671560630182961}
+  - component: {fileID: -993586751585428001}
   m_Layer: 0
   m_Name: FireBall
   m_TagString: Untagged
@@ -110,6 +111,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b13ef04151dd0744ebd2ffae5be527bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BallType: 0
   IsPlayer: 0
   State: 0
   startingPosition: {x: 0, y: 0, z: 0}
+--- !u!54 &-993586751585428001
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6114855324382863990}
+  serializedVersion: 2
+  m_Mass: 10
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using static ScriptableCharacterBase;
-using static ScriptableBallBase;
+using static Helpers;
 
 public class ResourceSystem : Singleton<ResourceSystem>
 {

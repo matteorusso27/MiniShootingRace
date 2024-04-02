@@ -18,6 +18,8 @@ public class BallBase : MonoBehaviour
         Grounded
     }
 
+    public BallType BallType;
+
     public bool IsPlayer;
     public BallState State;
     private float rotationSpeed = 200f;

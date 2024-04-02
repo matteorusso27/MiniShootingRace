@@ -11,8 +11,10 @@ public static class Helpers
     public static float     RANGES_DISTANCE = 0.2f; //Distance between perfect range and board range
     public static float     SPARKING_BOARD_TIME = PLAYER_TURN_TIME / 2f;
     public static float     ENEMY_SHOOT_FREQUENCY = 1.5f;
-    public static int       COUNTDOWN = 3;
-
+    public static int       COUNTDOWN = 1;
+    public static int       STREAK = 1;
+    public static int       FIRE_TIMER = 3;
+    public static float     ENERGY_BAR_FILL = 0.25f;
     #region Camera
     public static float     CAMERA_FOV = 24f;
     public static float     DEFAULT_FOV = 40f;
@@ -84,7 +86,7 @@ public static class Helpers
     {
         return value >= START_RANGE_BOARD_SHOOT - TOLERANCE && value <= END_RANGE_BOARD_SHOOT + TOLERANCE;
     }
-
+    public static bool IsScoreShoot(ShootType type) => type == ShootType.PerfectShoot || type == ShootType.RegularShoot || type == ShootType.BoardShoot; 
     public static ShootType GetShootType(float value)
     {
         if (IsInsidePerfectRange(value)) return ShootType.PerfectShoot;
@@ -122,6 +124,13 @@ public static class Helpers
         FailedShoot
     }
 
+    public enum BallType
+    {
+        NormalBall,
+        FireBall,
+        BlueBall
+    }
+
     public static int GetRandomNumber(int min, int max) => RANDOM.Next(min, max + 1);
 
     public static Vector3 GetFinalPosition(ShootType shootType, float value)
@@ -145,4 +154,6 @@ public static class Helpers
         }
         #endregion
     }
+
+    public static bool IsPlayerBallOfType(BallType balltype) => GameManager.Instance.gameData.PlayerBall.BallType == balltype;
 }
