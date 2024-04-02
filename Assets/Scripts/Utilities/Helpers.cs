@@ -14,7 +14,7 @@ public static class Helpers
     public static int       COUNTDOWN = 1;
     public static int       STREAK = 1;
     public static int       FIRE_TIMER = 3;
-    public static float     ENERGY_BAR_FILL = 0.25f;
+    public static float     ENERGY_BAR_FILL = 0.5f;
     #region Camera
     public static float     CAMERA_FOV = 24f;
     public static float     DEFAULT_FOV = 40f;

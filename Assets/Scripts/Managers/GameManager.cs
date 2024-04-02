@@ -26,6 +26,7 @@ public class GameManager : Singleton<GameManager>
         public int  CurrentPlayerStreak;
         public BallBase PlayerBall;
         public BallBase EnemyBall;
+        public Coroutine FireBallRoutine;
     }
 
     public GameData gameData;
@@ -114,6 +115,9 @@ public class GameManager : Singleton<GameManager>
         gameData.EnemyBall.OnScoreUpdate += OnEnemyScoreUpdated;
         gameData.PlayerBall.OnResetBall += OnBallReset;
         CameraManager.Instance.Init(gameData.PlayerBall.transform);
+        CanvasManager.Instance.SetEnergyBar(0f);
+        ChangePlayerBallTo(BallType.NormalBall);
+        gameData.FireBallRoutine = null;
         yield return StartCountDown();
 
         while (gameData.ElapsedPlayerTime < PLAYER_TURN_TIME)
@@ -131,14 +135,17 @@ public class GameManager : Singleton<GameManager>
                     gameData.CurrentPlayerShoot = GetShootType(normalizedValue);
                     if (IsScoreShoot(gameData.CurrentPlayerShoot))
                     {
-                        gameData.CurrentPlayerStreak++;
                         CanvasManager.Instance.FillEnergyBar();
-                        if (CanvasManager.Instance.GetEnergyBarFill() == 1f)
-                            StartCoroutine(FireBall());
+                        if (CanvasManager.Instance.GetEnergyBarFill() >= 1f && gameData.FireBallRoutine == null)
+                        {
+                            gameData.FireBallRoutine = StartCoroutine(FireBall());
+                            ChangePlayerBallTo(BallType.FireBall);
+                        }
                     }
-                    else 
+                    else
                     {
-                        gameData.CurrentPlayerStreak = 0;
+                        CanvasManager.Instance.SetEnergyBar(0f);
+                        gameData.FireBallRoutine = null;
                     }
 
                     var finalPosition = GetFinalPosition(gameData.CurrentPlayerShoot, normalizedValue);
@@ -165,7 +172,7 @@ public class GameManager : Singleton<GameManager>
         }
         swipeAgainCoroutine = null;
         // Go to next state
-
+        gameData.FireBallRoutine = null;
         gameData.EnemyBall.OnScoreUpdate -= OnEnemyScoreUpdated;
         gameData.PlayerBall.OnResetBall -= OnBallReset;
         gameData.CurrentPlayerStreak = 0;
@@ -209,21 +216,25 @@ public class GameManager : Singleton<GameManager>
         gameData.IsBoardSparking = toChange;
         CameraManager.Instance.Camera.m_Lens.FieldOfView = DEFAULT_FOV;
 
-        if (gameData.CurrentPlayerStreak >= STREAK && !IsPlayerBallOfType(BallType.FireBall))
+        if (CanvasManager.Instance.GetEnergyBarFill() >= 1f && !IsPlayerBallOfType(BallType.FireBall))
         {
             ChangePlayerBallTo(BallType.FireBall);
         }
-        if (IsPlayerBallOfType(BallType.FireBall) && gameData.CurrentPlayerStreak < STREAK)
+        
+        if (IsPlayerBallOfType(BallType.FireBall) && CanvasManager.Instance.GetEnergyBarFill() <= 0f && gameData.FireBallRoutine != null)
         {
             ChangePlayerBallTo(BallType.NormalBall);
+            gameData.FireBallRoutine = null;
         }
     }
     public void OnPlayerScoreUpdated()
     {
         var score = GetScore(gameData.CurrentPlayerShoot, gameData.IsBoardSparking);
-        gameData.PlayerScore += score;
         if (gameData.PlayerBall.BallType == BallType.FireBall)
+        {
             score *= 2;
+        }
+        gameData.PlayerScore += score;
         CanvasManager.Instance.Canvas.SetPlayerScore(gameData.PlayerScore);
     }
     
@@ -251,11 +262,9 @@ public class GameManager : Singleton<GameManager>
     public IEnumerator FireBall()
     {
         var time = 0f;
-        //Debug.Log(CanvasManager.Instance.GetEnergyBarFill());
         while (CanvasManager.Instance.GetEnergyBarFill() > 0)
         {
-            //Debug.Log(CanvasManager.Instance.GetEnergyBarFill());
-            time += Time.deltaTime * 0.001f;
+            time += Time.deltaTime * 0.00005f;
             CanvasManager.Instance.SetEnergyBar(CanvasManager.Instance.GetEnergyBarFill() - time);
             yield return null;
         }
