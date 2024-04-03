@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using static Helpers;
 using static GameSelectors;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class RewardCanvas : MonoBehaviour
 {
@@ -32,6 +33,6 @@ public class RewardCanvas : MonoBehaviour
         }
         ResultTxt.text = finalTxt;
         RewardTxt.text = reward;
-        RestartGameBtn.onClick.AddListener(delegate () { GameM.StartGame(); });
+        RestartGameBtn.onClick.AddListener(delegate () { SceneManager.LoadScene("MainScene"); ; });
     }
 }
