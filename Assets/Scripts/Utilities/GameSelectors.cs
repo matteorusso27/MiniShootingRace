@@ -10,4 +10,5 @@ public static class GameSelectors
     public static CanvasManager CanvasM => CanvasManager.Instance;
     public static SwipeManager SwipeM => SwipeManager.Instance;
     public static CameraManager CameraM => CameraManager.Instance;
+    public static AudioSystem AudioM => AudioSystem.Instance;
 }

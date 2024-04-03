@@ -271,6 +271,7 @@ public class GameManager : Singleton<GameManager>
     }
     public void OnPlayerScoreUpdated()
     {
+        AudioM.PlayBasketBallSound();
         var score = GetScore(Data.CurrentPlayerShoot, Data.IsBoardSparking);
         if (Data.PlayerBall.BallType == BallType.FireBall)
         {
