@@ -23,7 +23,7 @@ public class InstanceManager : Singleton<InstanceManager>
     public BallBase GetBall(bool IsPlayer) => GetBalls().Where(x => x.IsPlayer == IsPlayer).FirstOrDefault();
     public void SpawnPlayerAndBalls()
     {
-        SpawnPlayer(EntityType.Player);
+        //SpawnPlayer(EntityType.Player);
         SpawnBall(BallType.NormalBall, IsPlayer: true);
         SpawnBall(BallType.NormalBall, IsPlayer: false);
     }
