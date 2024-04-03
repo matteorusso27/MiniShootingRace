@@ -49,7 +49,8 @@ public class BallBase : MonoBehaviour
     private void Update()
     {
         if (IsGrounded) return;
-        HandleRotation();
+        if (BallType != BallType.FireBall)
+            HandleRotation();
     }
 
     private void HandleRotation()

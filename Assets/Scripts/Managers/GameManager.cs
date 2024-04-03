@@ -87,6 +87,9 @@ public class GameManager : Singleton<GameManager>
 
         Data.FireBallRoutine = null;
         ChangePlayerBallTo(BallType.NormalBall);
+        InstanceM.DestroyFire();
+
+        BoardSparking(false);
     }
 
     private void InitGameUI()
@@ -240,8 +243,7 @@ public class GameManager : Singleton<GameManager>
     private void CheckSparkingBoard()
     {
         var toChange = Data.ElapsedPlayerTime >= SPARKING_BOARD_TIME;
-        var board = GameObject.FindGameObjectWithTag(StringTag(GameTag.Board));
-        board.GetComponent<MeshRenderer>().enabled = toChange;
+        BoardSparking(toChange);
         Data.IsBoardSparking = toChange;
     }
     private void OnBallReset()
@@ -256,6 +258,7 @@ public class GameManager : Singleton<GameManager>
             {
                 Data.FireBallRoutine = StartCoroutine(FireBall());
                 ChangePlayerBallTo(BallType.FireBall);
+                InstanceM.SpawnFire();
             }
         }
         else
@@ -263,6 +266,7 @@ public class GameManager : Singleton<GameManager>
             CanvasM.SetEnergyBar(0f);
             Data.FireBallRoutine = null;
             ChangePlayerBallTo(BallType.NormalBall);
+            InstanceM.DestroyFire();
         }
     }
     public void OnPlayerScoreUpdated()
@@ -278,6 +282,8 @@ public class GameManager : Singleton<GameManager>
         if (IsScoreShoot(Data.CurrentPlayerShoot))
         {
             CanvasM.FillEnergyBar();
+            if (Data.CurrentPlayerShoot == ShootType.BoardShoot && InstanceM.BoardVFX.activeInHierarchy)
+                BoardSparking(false);
         }
         else
         {
@@ -289,6 +295,8 @@ public class GameManager : Singleton<GameManager>
     {
         var score = GetScore(Data.CurrentEnemyShoot, Data.IsBoardSparking);
         Data.EnemyScore += score;
+        if (Data.CurrentEnemyShoot == ShootType.BoardShoot && InstanceM.BoardVFX.activeInHierarchy)
+            BoardSparking(false);
         CanvasM.Canvas.SetEnemyScore(Data.EnemyScore);
     }
 
@@ -318,7 +326,16 @@ public class GameManager : Singleton<GameManager>
             yield return null;
         }
         if (Data.PlayerBall.BallType != BallType.NormalBall)
+        {
             ChangePlayerBallTo(BallType.NormalBall);
+            InstanceM.DestroyFire();
+        }
         CanvasM.Canvas.ChangeFireBallTxt(false);
+    }
+
+    private void BoardSparking(bool toChange)
+    {
+        InstanceM.BoardVFX.SetActive(toChange);
+        CanvasM.Canvas.ChangeBoardTxt(toChange);
     }
 }

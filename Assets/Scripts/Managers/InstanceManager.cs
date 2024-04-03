@@ -9,7 +9,8 @@ using System.Linq;
 public class InstanceManager : Singleton<InstanceManager>
 {
     public List<GameObject> SceneObjects;
-
+    public GameObject       FireVFX;
+    public GameObject       BoardVFX;
     public void Start()
     {
         SceneObjects = new List<GameObject>();
@@ -19,6 +20,8 @@ public class InstanceManager : Singleton<InstanceManager>
     {
         return SceneObjects.Where(x => x.GetComponent<BallBase>() != null).Select(x=> x.GetComponent<BallBase>()).ToArray();
     }
+
+    public GameObject GetFire() => SceneObjects.Where(x => x.GetComponent<ParticleSystem>() != null).FirstOrDefault();
 
     public BallBase GetBall(bool IsPlayer) => GetBalls().Where(x => x.IsPlayer == IsPlayer).FirstOrDefault();
     public void SpawnPlayerAndBalls()
@@ -46,5 +49,21 @@ public class InstanceManager : Singleton<InstanceManager>
         var toSpawn = Instantiate(characterScriptable.prefab, characterPosition, Quaternion.identity);
         toSpawn.StreakPoints = 0;
         SceneObjects.Add(toSpawn.gameObject);
+    }
+
+    public void SpawnFire()
+    {
+        var playerBall = GetBall(true).transform;
+        var toSpawn = Instantiate(FireVFX, playerBall.position, Quaternion.identity);
+        toSpawn.transform.SetParent(playerBall);
+        SceneObjects.Add(toSpawn);
+    }
+
+    public void DestroyFire()
+    {
+        var fire = GetFire();
+        if (fire == null) return;
+        SceneObjects.Remove(fire);
+        Destroy(fire);
     }
 }
