@@ -221,7 +221,7 @@ public class GameManager : Singleton<GameManager>
         var result = ResultGame.None;
 
         if (Data.PlayerScore < Data.EnemyScore) result = ResultGame.Lost;
-        if (Data.PlayerScore > Data.EnemyScore) result = ResultGame.Won;
+        else if (Data.PlayerScore > Data.EnemyScore) result = ResultGame.Won;
         else result = ResultGame.Tie;
 
         Data.IsRestarting = true;
@@ -252,7 +252,6 @@ public class GameManager : Singleton<GameManager>
 
         if (IsScoreShoot(Data.CurrentPlayerShoot))
         {
-            CanvasM.FillEnergyBar();
             if (CanvasM.GetEnergyBarFill() >= 1f && Data.FireBallRoutine == null)
             {
                 Data.FireBallRoutine = StartCoroutine(FireBall());
@@ -275,6 +274,15 @@ public class GameManager : Singleton<GameManager>
         }
         Data.PlayerScore += score;
         CanvasM.Canvas.SetPlayerScore(Data.PlayerScore);
+
+        if (IsScoreShoot(Data.CurrentPlayerShoot))
+        {
+            CanvasM.FillEnergyBar();
+        }
+        else
+        {
+            CanvasM.SetEnergyBar(0f);
+        }
     }
     
     public void OnEnemyScoreUpdated()
@@ -304,7 +312,7 @@ public class GameManager : Singleton<GameManager>
         var time = 0f;
         while (CanvasManager.Instance.GetEnergyBarFill() > 0)
         {
-            time += Time.deltaTime * 0.00005f; //todo I don't like this value
+            time += Time.deltaTime * 0.0005f; //todo I don't like this value
             CanvasManager.Instance.SetEnergyBar(CanvasManager.Instance.GetEnergyBarFill() - time);
             yield return null;
         }

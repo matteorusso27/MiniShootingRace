@@ -5,7 +5,7 @@ using UnityEngine;
 public static class Helpers
 {
     public static float     TIME_TO_SWIPE = 0.25f;
-    public static float     PLAYER_TURN_TIME = 10f;
+    public static float     PLAYER_TURN_TIME = 30f;
     public static float     GRAVITY = 9.81f;
     public static float     MIN_SWIPE = 100f;
     public static float     RANGES_DISTANCE = 0.2f; //Distance between perfect range and board range
