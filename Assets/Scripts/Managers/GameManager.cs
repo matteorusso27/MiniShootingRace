@@ -93,6 +93,7 @@ public class GameManager : Singleton<GameManager>
         CanvasM.Canvas.gameObject.SetActive(true);
         CanvasM.Canvas.SetPlayerScore(0);
         CanvasM.Canvas.SetEnemyScore(0);
+        CanvasM.Canvas.SetTime((int)PLAYER_TURN_TIME);
         CanvasM.Canvas.FinalText.transform.gameObject.SetActive(false);
         CanvasM.Canvas.RestartBtn.transform.gameObject.SetActive(false);
         CanvasM.Canvas.CountDown.transform.gameObject.SetActive(true);

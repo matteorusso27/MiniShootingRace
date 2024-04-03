@@ -38,8 +38,8 @@ public class GameCanvas : MonoBehaviour
         FillBar.fillAmount = value;
     }
 
-    public void SetPlayerScore(int s) => PlayerScore.text = "P Score: "+s.ToString();
-    public void SetEnemyScore(int s) => EnemyScore.text = "E Score: "+s.ToString();
+    public void SetPlayerScore(int s) => PlayerScore.text = "Player: "+s.ToString();
+    public void SetEnemyScore(int s) => EnemyScore.text = "Enemy: "+s.ToString();
     public void SetFinalText(string s)
     {
         FinalText.transform.gameObject.SetActive(true);

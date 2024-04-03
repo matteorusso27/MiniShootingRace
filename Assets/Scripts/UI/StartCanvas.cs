@@ -10,6 +10,9 @@ public class StartCanvas : MonoBehaviour
 
     void Start()
     {
+        gameObject.SetActive(true);
+        CanvasM.Canvas.gameObject.SetActive(false);
+
         StartGameBtn.onClick.AddListener(delegate () { StartGameLoop(); });
     }
 
