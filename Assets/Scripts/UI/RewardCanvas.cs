@@ -28,7 +28,7 @@ public class RewardCanvas : MonoBehaviour
         else if (result == ResultGame.Tie)
         {
             finalTxt = "Tie";
-            reward = "25$";
+            reward = "You got 25$";
         }
         ResultTxt.text = finalTxt;
         RewardTxt.text = reward;
