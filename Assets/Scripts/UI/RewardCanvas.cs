@@ -10,17 +10,28 @@ public class RewardCanvas : MonoBehaviour
 {
     public Button       RestartGameBtn;
     public TMP_Text     ResultTxt;
+    public TMP_Text     RewardTxt;
     public void Setup(ResultGame result)
     {
         gameObject.SetActive(true);
-        string s = "";
+        string finalTxt = "";
+        string reward = "";
         if (result == ResultGame.Won)
-            s = "You Win";
+        {
+            finalTxt = "You Win";
+            reward = "You got 50$";
+        }
         else if (result == ResultGame.Lost)
-            s = "You lose";
+        {
+            finalTxt = "You lose";
+        }
         else if (result == ResultGame.Tie)
-            s = "Tie";
-        ResultTxt.text = s;
+        {
+            finalTxt = "Tie";
+            reward = "25$";
+        }
+        ResultTxt.text = finalTxt;
+        RewardTxt.text = reward;
         RestartGameBtn.onClick.AddListener(delegate () { GameM.StartGame(); });
     }
 }
