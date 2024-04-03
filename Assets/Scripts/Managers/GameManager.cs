@@ -301,7 +301,7 @@ public class GameManager : Singleton<GameManager>
 
     public void ChangePlayerBallTo(BallType type)
     {
-        var path = type == BallType.NormalBall ? "Materials/NormalBallMat" : "Materials/FireBallMat";
+        var path = type == BallType.NormalBall ? "Materials/Regular/NormalBallMat" : "Materials/Regular/FireBallMat";
         var mat = Resources.Load(path, typeof(Material)) as Material;
         Data.PlayerBall.gameObject.GetComponent<MeshRenderer>().material = mat;
         Data.PlayerBall.BallType = type;
@@ -309,6 +309,7 @@ public class GameManager : Singleton<GameManager>
 
     public IEnumerator FireBall()
     {
+        CanvasM.Canvas.ChangeFireBallTxt(true);
         var time = 0f;
         while (CanvasManager.Instance.GetEnergyBarFill() > 0)
         {
@@ -316,6 +317,8 @@ public class GameManager : Singleton<GameManager>
             CanvasManager.Instance.SetEnergyBar(CanvasManager.Instance.GetEnergyBarFill() - time);
             yield return null;
         }
-        ChangePlayerBallTo(BallType.NormalBall);
+        if (Data.PlayerBall.BallType != BallType.NormalBall)
+            ChangePlayerBallTo(BallType.NormalBall);
+        CanvasM.Canvas.ChangeFireBallTxt(false);
     }
 }
