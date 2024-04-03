@@ -48,7 +48,6 @@ public class BallBase : MonoBehaviour
 
     private void Update()
     {
-        CanvasM.Canvas.SetBallState(State.ToString()); //todo remove
         if (IsGrounded) return;
         HandleRotation();
     }

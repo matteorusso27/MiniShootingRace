@@ -8,7 +8,7 @@ using static Helpers;
 public class CanvasManager : Singleton<CanvasManager>
 {
     [SerializeField]
-    public Canvas Canvas;
+    public GameCanvas Canvas;
 
     public void SetupFillBar()
     {

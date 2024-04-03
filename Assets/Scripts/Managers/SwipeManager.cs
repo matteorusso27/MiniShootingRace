@@ -48,8 +48,6 @@ public class SwipeManager : Singleton<SwipeManager>
     {
         normalizedDistance = 0f;
         CanvasM.Canvas.SetFillBar(normalizedDistance);
-        CanvasM.Canvas.SetText(normalizedDistance.ToString());
-        CanvasM.Canvas.SetSwipeStateText(State.ToString());
         ChangeSwipeState(SwipeState.SwipeDetection);
     }
     private void OnSwipe(string swipe)
@@ -84,7 +82,6 @@ public class SwipeManager : Singleton<SwipeManager>
         startingPointY = -1;
         swipeCoroutine = null; 
         ChangeSwipeState(SwipeState.SwipeMeasured);
-        CanvasM.Canvas.SetSwipeStateText(State.ToString());
     }
 
     private void Update()
@@ -107,9 +104,7 @@ public class SwipeManager : Singleton<SwipeManager>
     private void UpdateUI()
     {
         // Update UI with swipe distance
-        CanvasM.Canvas.SetText("D: " + normalizedDistance.ToString());
         CanvasM.Canvas.SetFillBar(normalizedDistance);
-        CanvasM.Canvas.SetSwipeStateText(State.ToString());
         var markerPositionY = CanvasM.Canvas.FillBarHeight * normalizedDistance;
         CanvasM.Canvas.FillMarker.rectTransform.anchoredPosition = new Vector3(0, markerPositionY, 0);
     }
