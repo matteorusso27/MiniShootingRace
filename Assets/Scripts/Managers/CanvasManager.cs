@@ -10,6 +10,7 @@ public class CanvasManager : Singleton<CanvasManager>
     [SerializeField]
     public GameCanvas   Canvas;
     public StartCanvas  StartCanvas;
+    public RewardCanvas RewardCanvas;
 
     private void Start()
     {

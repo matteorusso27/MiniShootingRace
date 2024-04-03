@@ -26,6 +26,7 @@ public class GameManager : Singleton<GameManager>
         
         public bool IsBoardSparking;
         public bool IsBallReady;
+        public bool IsRestarting;
         
         public BallBase PlayerBall;
         public BallBase EnemyBall;
@@ -113,12 +114,16 @@ public class GameManager : Singleton<GameManager>
     private void HandleStart()
     {
         CanvasM.StartCanvas.gameObject.SetActive(false);
+        CanvasM.RewardCanvas.gameObject.SetActive(false);
         ChangeState(GameState.SpawningPlayer);
     }
 
     private void HandleSpawningPlayer()
     {
-        InstanceM.SpawnPlayerAndBalls();
+        if (!Data.IsRestarting)
+        {
+            InstanceM.SpawnPlayerAndBalls();
+        }
         Init();
 
         ChangeState(GameState.PlayerTurn);
@@ -213,15 +218,15 @@ public class GameManager : Singleton<GameManager>
         Data.PlayerBall.OnScoreUpdate -= OnPlayerScoreUpdated;
         Data.EnemyBall.OnScoreUpdate -= OnEnemyScoreUpdated;
 
-        string s;
-        if (Data.PlayerScore > Data.EnemyScore)
-            s = "You Win";
-        else if (Data.PlayerScore < Data.EnemyScore)
-            s = "You lose";
-        else
-            s = "Tie";
-        CanvasM.Canvas.SetFinalText(s);
-        CanvasM.Canvas.RestartBtn.transform.gameObject.SetActive(true);
+        var result = ResultGame.None;
+
+        if (Data.PlayerScore < Data.EnemyScore) result = ResultGame.Lost;
+        if (Data.PlayerScore > Data.EnemyScore) result = ResultGame.Won;
+        else result = ResultGame.Tie;
+
+        Data.IsRestarting = true;
+        CanvasM.Canvas.gameObject.SetActive(false);
+        CanvasM.RewardCanvas.Setup(result);
     }
 
     public enum GameState

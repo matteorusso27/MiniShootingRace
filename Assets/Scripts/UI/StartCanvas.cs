@@ -6,12 +6,13 @@ using UnityEngine.UI;
 using static GameSelectors;
 public class StartCanvas : MonoBehaviour
 {
-    public Button StartGameBtn;
+    public Button       StartGameBtn;
 
     void Start()
     {
         gameObject.SetActive(true);
         CanvasM.Canvas.gameObject.SetActive(false);
+        CanvasM.RewardCanvas.gameObject.SetActive(false);
 
         StartGameBtn.onClick.AddListener(delegate () { StartGameLoop(); });
     }

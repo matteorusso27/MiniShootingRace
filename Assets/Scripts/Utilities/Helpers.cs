@@ -154,4 +154,12 @@ public static class Helpers
     }
 
     public static bool IsPlayerBallOfType(BallType balltype) => GameManager.Instance.Data.PlayerBall.BallType == balltype;
+
+    public enum ResultGame
+    {
+        None,
+        Won,
+        Lost,
+        Tie
+    }
 }
