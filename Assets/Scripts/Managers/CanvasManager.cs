@@ -8,8 +8,13 @@ using static Helpers;
 public class CanvasManager : Singleton<CanvasManager>
 {
     [SerializeField]
-    public GameCanvas Canvas;
+    public GameCanvas   Canvas;
+    public StartCanvas  StartCanvas;
 
+    private void Start()
+    {
+        Canvas.gameObject.SetActive(false);
+    }
     public void SetupFillBar()
     {
         CalculateRanges(difficulty: 5);

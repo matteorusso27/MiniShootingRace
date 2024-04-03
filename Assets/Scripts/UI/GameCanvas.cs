@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using static GameSelectors;
 public class GameCanvas : MonoBehaviour
 {
     //todo clean, they were made for debug purposes
@@ -22,6 +23,11 @@ public class GameCanvas : MonoBehaviour
     public float BoardRangeHeight => BoardRange.rectTransform.rect.height;
     public float FillBarHeight => FillBar.rectTransform.rect.height;
 
+
+    private void Start()
+    {
+        RestartBtn.onClick.AddListener(delegate () { GameM.OnRestartingGame(); });
+    }
     public void SetTime(int t)
     {
         playerTurnCountDown.text = "Time: "+t.ToString();

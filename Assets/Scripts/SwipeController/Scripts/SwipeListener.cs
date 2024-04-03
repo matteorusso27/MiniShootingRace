@@ -80,6 +80,8 @@ namespace GG.Infrastructure.Utils.Swipe {
                 //todo add check minimum swipe required or add it in gamemanager,
                 // otherwise it is always triggered 
                 // use MIN_SWIPE
+                _offset = Input.mousePosition - _swipePoint;
+                if (_offset.y < Helpers.MIN_SWIPE) return;
                 OnSwipeCancelled?.Invoke();
             }
         }

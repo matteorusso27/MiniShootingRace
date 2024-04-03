@@ -37,7 +37,7 @@ public class GameManager : Singleton<GameManager>
     public GameData Data;
     #endregion
 
-    void Start()
+    public void StartGame()
     {
         ChangeState(GameState.Start);
     }
@@ -88,8 +88,9 @@ public class GameManager : Singleton<GameManager>
         ChangePlayerBallTo(BallType.NormalBall);
     }
 
-    private void InitUI()
+    private void InitGameUI()
     {
+        CanvasM.Canvas.gameObject.SetActive(true);
         CanvasM.Canvas.SetPlayerScore(0);
         CanvasM.Canvas.SetEnemyScore(0);
         CanvasM.Canvas.FinalText.transform.gameObject.SetActive(false);
@@ -102,7 +103,7 @@ public class GameManager : Singleton<GameManager>
     private void Init()
     {
         InitGameData();
-        InitUI();
+        InitGameUI();
 
         //Setup managers
         SwipeM.Setup();
@@ -110,6 +111,7 @@ public class GameManager : Singleton<GameManager>
     }
     private void HandleStart()
     {
+        CanvasM.StartCanvas.gameObject.SetActive(false);
         ChangeState(GameState.SpawningPlayer);
     }
 
@@ -174,7 +176,7 @@ public class GameManager : Singleton<GameManager>
             yield return new WaitForSeconds(1f);
             CanvasM.Canvas.CountDown.transform.gameObject.SetActive(false);
         }
-        
+
         yield return StartCountDown();
 
         // Main game loop
