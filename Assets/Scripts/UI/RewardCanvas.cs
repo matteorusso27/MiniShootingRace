@@ -10,17 +10,14 @@ using UnityEngine.SceneManagement;
 public class RewardCanvas : MonoBehaviour
 {
     public Button       RestartGameBtn;
-    public TMP_Text     ResultTxt;
     public TMP_Text     RewardTxt;
     public void Setup(ResultGame result)
     {
         gameObject.SetActive(true);
         string finalTxt = "";
-        string reward = "";
         if (result == ResultGame.Won)
         {
-            finalTxt = "You Win";
-            reward = "You got 50$";
+            finalTxt = "You Win\nYou got 50$";
         }
         else if (result == ResultGame.Lost)
         {
@@ -28,11 +25,9 @@ public class RewardCanvas : MonoBehaviour
         }
         else if (result == ResultGame.Tie)
         {
-            finalTxt = "Tie";
-            reward = "You got 25$";
+            finalTxt = "Tie\nYou got 25$";
         }
-        ResultTxt.text = finalTxt;
-        RewardTxt.text = reward;
+        RewardTxt.text = finalTxt;
         RestartGameBtn.onClick.AddListener(delegate () { SceneManager.LoadScene("MainScene"); ; });
     }
 }

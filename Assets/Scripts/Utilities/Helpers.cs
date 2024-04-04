@@ -5,7 +5,7 @@ using UnityEngine;
 public static class Helpers
 {
     public static float     TIME_TO_SWIPE = 0.25f;
-    public static float     PLAYER_TURN_TIME = 25f;
+    public static float     PLAYER_TURN_TIME = 8f;
     public static float     GRAVITY = 9.81f;
     public static float     MIN_SWIPE = 100f;
     public static float     RANGES_DISTANCE = 0.2f; //Distance between perfect range and board range
@@ -21,6 +21,7 @@ public static class Helpers
     #region ScorePoints
     public static int       PERFECT_SHOOT_SCORE = 3;
     public static int       REGULAR_SHOOT_SCORE = 2;
+    public static GameDifficulty DIFFICULTY = GameDifficulty.Normal;
     #endregion
 
     public static Vector3   HOOP_POSITION = new Vector3(0.27f, 7.62f, 5.92f);
@@ -94,8 +95,18 @@ public static class Helpers
         return ShootType.FailedShoot;
     }
 
-    public static ShootType GetRandomShootType() => (ShootType) GetRandomNumber(0, 3);
-    
+    public static ShootType GetRandomShootType()
+    {
+        var failedShootMaxRange = DIFFICULTY == GameDifficulty.Normal ? 6 : 4;
+        var rnd = GetRandomNumber(0, 10);
+        if (rnd < failedShootMaxRange)
+        {
+            Debug.Log("Enemy missed shot\n");
+            return ShootType.FailedShoot;
+        }
+        Debug.Log("Enemy ok shoot");
+        return rnd > (10 - failedShootMaxRange) / 2 + failedShootMaxRange ? ShootType.PerfectShoot : ShootType.BoardShoot;
+    }
     public static void SetThrowHeight(ShootType shootype, float chargedValue)
     {
         switch (shootype)
@@ -162,5 +173,11 @@ public static class Helpers
         Won,
         Lost,
         Tie
+    }
+
+    public enum GameDifficulty
+    {
+        Normal,
+        High
     }
 }
