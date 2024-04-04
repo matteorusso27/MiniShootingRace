@@ -36,17 +36,17 @@ public class GameManager : Singleton<GameManager>
 
     public GameData Data;
     #endregion
-
-    public void StartGame()
-    {
-        ChangeState(GameState.Start);
-    }
+    public void Start() => ChangeState(GameState.StartPage);
+    public void StartGame() => ChangeState(GameState.Start);
     private void ChangeState(GameState newState)
     {
         OnBeforeStateChanged?.Invoke(newState);
         State = newState;
         switch (newState)
         {
+            case GameState.StartPage:
+                EnableStartPage();
+                break;
             case GameState.Start:
                 HandleStart();
                 break;
@@ -121,6 +121,11 @@ public class GameManager : Singleton<GameManager>
         CanvasM.StartCanvas.gameObject.SetActive(false);
         CanvasM.RewardCanvas.gameObject.SetActive(false);
         ChangeState(GameState.SpawningPlayer);
+    }
+
+    private void EnableStartPage()
+    {
+        CanvasM.StartCanvas.gameObject.SetActive(true);
     }
 
     private void HandleSpawningPlayer()
@@ -235,10 +240,11 @@ public class GameManager : Singleton<GameManager>
 
     public enum GameState
     {
-        Start = 0,
-        SpawningPlayer = 1,
-        PlayerTurn = 2,
-        End = 3
+        StartPage= 0,
+        Start = 1,
+        SpawningPlayer = 2,
+        PlayerTurn = 3,
+        End = 4
     }
 
     private void CheckSparkingBoard()

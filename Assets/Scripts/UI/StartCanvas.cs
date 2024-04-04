@@ -13,7 +13,6 @@ public class StartCanvas : MonoBehaviour
 
     void Start()
     {
-        gameObject.SetActive(true);
         CanvasM.Canvas.gameObject.SetActive(false);
         CanvasM.RewardCanvas.gameObject.SetActive(false);
 

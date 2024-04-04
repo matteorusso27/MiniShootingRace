@@ -100,11 +100,8 @@ public static class Helpers
         var failedShootMaxRange = DIFFICULTY == GameDifficulty.Normal ? 6 : 4;
         var rnd = GetRandomNumber(0, 10);
         if (rnd < failedShootMaxRange)
-        {
-            Debug.Log("Enemy missed shot\n");
             return ShootType.FailedShoot;
-        }
-        Debug.Log("Enemy ok shoot");
+
         return rnd > (10 - failedShootMaxRange) / 2 + failedShootMaxRange ? ShootType.PerfectShoot : ShootType.BoardShoot;
     }
     public static void SetThrowHeight(ShootType shootype, float chargedValue)
