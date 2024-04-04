@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Managers base abstract class
 public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     public static T Instance { get; private set; }

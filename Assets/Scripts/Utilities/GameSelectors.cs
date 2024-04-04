@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Handy way to handle the Managers
 public static class GameSelectors 
 {
     public static GameManager GameM => GameManager.Instance;

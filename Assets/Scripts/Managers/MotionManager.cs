@@ -4,6 +4,8 @@ using System.Linq;
 using UnityEngine;
 using static Helpers;
 using static GameSelectors;
+
+// This manager handles the movement (parabolic + physics based) of the balls
 public class MotionManager : Singleton<MotionManager>
 {
     public QuadraticCurve  PlayerCurve;
@@ -50,6 +52,8 @@ public class MotionManager : Singleton<MotionManager>
         var distance = Vector3.Distance(curve.StartingPoint, curve.FinalPoint);
         var time = IsPlayerBall ? CurrentPlayerTime : CurrentTimeEnemy;
         var cameraFOV = CameraM.Camera.m_Lens.FieldOfView;
+
+        // Loop until the desired point and the ball gets close enough
         while ( distance >= 0.5f)
         {
             time += Time.deltaTime;
@@ -68,6 +72,7 @@ public class MotionManager : Singleton<MotionManager>
         if (IsPlayerBall) IsPlayerBallInMotion = false;
         else IsEnemyBallInMotion = false;
         
+        // Then simulate physics mode to add realism
         ball.GetComponent<BallBase>().SimulatePhysicsMode();
     }
 

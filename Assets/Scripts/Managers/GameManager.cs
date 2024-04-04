@@ -4,6 +4,9 @@ using System.Linq;
 using UnityEngine;
 using static Helpers;
 using static GameSelectors;
+
+// Handles the main loop of the game and interacts with other managers 
+// to coordinate on the shared state
 public class GameManager : Singleton<GameManager>
 {
     public static event Action<GameState> OnBeforeStateChanged;
@@ -172,6 +175,7 @@ public class GameManager : Singleton<GameManager>
 
         Data.IsBallReady = Data.PlayerBall.IsReady;
 
+        // Using delegates to get the exact time when events occur
         Data.PlayerBall.OnScoreUpdate += OnPlayerScoreUpdated;
         Data.EnemyBall.OnScoreUpdate += OnEnemyScoreUpdated;
         Data.PlayerBall.OnResetBall += OnBallReset;
@@ -188,6 +192,7 @@ public class GameManager : Singleton<GameManager>
 
     #endregion
 
+    // Player ball logic
     private void HandlePlayerBall()
     {
         if (SwipeM.SwipeIsMeasured)
@@ -212,6 +217,7 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    // Enemy AI Logic
     private void HandleEnemyBall()
     {
         if (Data.EnemyBall.IsReady)
@@ -229,6 +235,8 @@ public class GameManager : Singleton<GameManager>
     {
         Data.SwipeAgainRoutine = null;
         Data.FireBallRoutine = null;
+
+        // Release delegates
         Data.EnemyBall.OnScoreUpdate -= OnEnemyScoreUpdated;
         Data.PlayerBall.OnResetBall -= OnBallReset;
 
@@ -236,6 +244,7 @@ public class GameManager : Singleton<GameManager>
         Data.EnemyBall.OnTriggerPhysics -= OnSimulationMode;
     }
 
+    // Check whether the board should spark
     private void CheckSparkingBoard()
     {
         var toChange = !InstanceM.BoardVFX.activeInHierarchy && GetRandomNumber(0,10) < 3;
@@ -298,6 +307,7 @@ public class GameManager : Singleton<GameManager>
         Data.PlayerBall.BallType = type;
     }
 
+    // Handle Fireball logic once the energy bar is filled
     public IEnumerator FireBall()
     {
         CanvasM.GameCanvas.ChangeFireBallTxt(true);

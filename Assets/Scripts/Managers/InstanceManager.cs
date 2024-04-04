@@ -11,6 +11,8 @@ public class InstanceManager : Singleton<InstanceManager>
     public List<GameObject> SceneObjects;
     public GameObject       FireVFX;
     public GameObject       BoardVFX;
+
+    // List of all spawned objects in the game
     public void Start() => SceneObjects = new List<GameObject>();
 
     public BallBase[] GetBalls()

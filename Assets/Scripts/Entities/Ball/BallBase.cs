@@ -2,6 +2,8 @@ using System.Collections;
 using UnityEngine;
 using static Helpers;
 using static GameSelectors;
+
+// Ball class that keeps track of its status through delegates relayed to the GameManager
 public class BallBase : MonoBehaviour
 {
     public delegate void ScoreUpdateEventHandler();

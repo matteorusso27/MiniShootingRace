@@ -5,6 +5,8 @@ using TMPro;
 using UnityEngine;
 using static Helpers;
 
+// Manages different game canvas
+
 public class CanvasManager : Singleton<CanvasManager>
 {
     [SerializeField]
@@ -18,6 +20,7 @@ public class CanvasManager : Singleton<CanvasManager>
         DrawRanges();
     }
 
+    // Based on the difficulty, setup the green range (perfect and normal shoot) and the pink range (board shoot)
     public void CalculateGameRanges(int difficulty)
     {
         // todo should not be random but based on the court position, however is good to be a number 
@@ -39,6 +42,7 @@ public class CanvasManager : Singleton<CanvasManager>
         GameCanvas.BoardRange.rectTransform.anchoredPosition = new Vector3(0, startingBoardRangePositionY, 0);
     }
 
+    // Manages the Energy bar to keep track of streak points
     public void FillEnergyBar()
     {
         var currentAmount = GameCanvas.EnergyBar.fillAmount;

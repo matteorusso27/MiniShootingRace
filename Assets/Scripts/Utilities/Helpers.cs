@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Static class used to store infos needed throughout the whole project
 public static class Helpers
 {
     #region GENERAL

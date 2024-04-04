@@ -4,6 +4,7 @@ using UnityEngine;
 using static Helpers;
 using static GameSelectors;
 
+// Manages the swipe detection
 public class SwipeManager : Singleton<SwipeManager>
 {
     [SerializeField] private SwipeListener swipeListener;

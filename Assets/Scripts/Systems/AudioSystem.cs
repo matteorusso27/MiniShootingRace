@@ -1,6 +1,8 @@
 
 using UnityEngine;
 using static GameSelectors;
+
+// Handles different audio system in the game
 public class AudioSystem : Singleton<AudioSystem>
 {
     [SerializeField] private AudioSource GameMusic;

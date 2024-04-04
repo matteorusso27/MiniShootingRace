@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static Helpers;
+
+// WIP, Player class should be added before the shoot to have an actual player to play with
+// There is the 3D model and their animations in the project
 public class Player : CharacterBase
 {
     private Animator    animator;

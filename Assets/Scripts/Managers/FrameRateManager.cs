@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Threading;
 using UnityEngine;
+
+// Cap the game to a certain amount of Fps
 public class FrameRateManager : Singleton<FrameRateManager>
 {
     private void Start()
