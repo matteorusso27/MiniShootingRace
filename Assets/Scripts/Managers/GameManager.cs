@@ -84,11 +84,14 @@ public class GameManager : Singleton<GameManager>
         Data.PlayerBall.OnScoreUpdate += OnPlayerScoreUpdated;
         Data.EnemyBall.OnScoreUpdate += OnEnemyScoreUpdated;
         Data.PlayerBall.OnResetBall += OnBallReset;
+        Data.PlayerBall.OnTriggerPhysics += OnSimulationMode;
+        Data.EnemyBall.OnTriggerPhysics += OnSimulationMode;
 
         Data.FireBallRoutine = null;
         ChangePlayerBallTo(BallType.NormalBall);
         InstanceM.DestroyFire();
 
+        AudioM.Setup();
         BoardSparking(false);
     }
 
@@ -210,6 +213,9 @@ public class GameManager : Singleton<GameManager>
         Data.FireBallRoutine = null;
         Data.EnemyBall.OnScoreUpdate -= OnEnemyScoreUpdated;
         Data.PlayerBall.OnResetBall -= OnBallReset;
+
+        Data.PlayerBall.OnTriggerPhysics -= OnSimulationMode;
+        Data.EnemyBall.OnTriggerPhysics -= OnSimulationMode;
     }
 
     private IEnumerator HandleEnd()
@@ -267,7 +273,16 @@ public class GameManager : Singleton<GameManager>
             Data.FireBallRoutine = null;
             ChangePlayerBallTo(BallType.NormalBall);
             InstanceM.DestroyFire();
+            AudioM.StopFireSound();
         }
+    }
+
+    private void OnSimulationMode(bool isPlayer)
+    {
+        if (isPlayer && Data.CurrentPlayerShoot == ShootType.BoardShoot)
+            AudioM.PlayBoardSound();
+        if (!isPlayer && Data.CurrentEnemyShoot == ShootType.BoardShoot)
+            AudioM.PlayBoardSound();
     }
     public void OnPlayerScoreUpdated()
     {
@@ -319,6 +334,7 @@ public class GameManager : Singleton<GameManager>
     public IEnumerator FireBall()
     {
         CanvasM.Canvas.ChangeFireBallTxt(true);
+        AudioM.PlayFireSound();
         var time = 0f;
         while (CanvasManager.Instance.GetEnergyBarFill() > 0)
         {
@@ -330,6 +346,7 @@ public class GameManager : Singleton<GameManager>
         {
             ChangePlayerBallTo(BallType.NormalBall);
             InstanceM.DestroyFire();
+            AudioM.StopFireSound();
         }
         CanvasM.Canvas.ChangeFireBallTxt(false);
     }

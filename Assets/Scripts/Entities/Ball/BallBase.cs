@@ -10,6 +10,9 @@ public class BallBase : MonoBehaviour
     public delegate void ResetBallHandler();
     public event ResetBallHandler OnResetBall;
 
+    public delegate void OnTriggerPhysicsSimulation(bool isPlayer);
+    public event OnTriggerPhysicsSimulation OnTriggerPhysics;
+
     // For score updates
     private int encounteredTriggers = 0;
     public enum BallState
@@ -65,15 +68,11 @@ public class BallBase : MonoBehaviour
     {
         rb.isKinematic = false;
         rb.useGravity = true;
+        OnTriggerPhysics?.Invoke(IsPlayer);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag(StringTag(GameTag.Board)))
-        {
-            SimulatePhysicsMode();
-        }
-        
         if (collision.gameObject.CompareTag(StringTag(GameTag.Terrain)))
         {
             StartReset();
@@ -94,11 +93,9 @@ public class BallBase : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        // todo remove?
-        if (other.gameObject.CompareTag(StringTag(GameTag.HoopTriggers)))
+        if (other.gameObject.CompareTag(StringTag(GameTag.Board)))
         {
-           //rb.isKinematic = false;
-           //rb.useGravity = true;
+            AudioM.PlayBoardSound();
         }
     }
 
