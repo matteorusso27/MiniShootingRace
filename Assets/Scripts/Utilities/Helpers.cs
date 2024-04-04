@@ -4,15 +4,21 @@ using UnityEngine;
 
 public static class Helpers
 {
+    #region GENERAL
     public static float     TIME_TO_SWIPE = 0.25f;
-    public static float     PLAYER_TURN_TIME = 8f;
+    public static float     PLAYER_TURN_TIME = 50f;
     public static float     GRAVITY = 9.81f;
     public static float     MIN_SWIPE = 100f;
     public static float     RANGES_DISTANCE = 0.2f; //Distance between perfect range and board range
     public static float     SPARKING_BOARD_TIME = PLAYER_TURN_TIME / 2f;
-    public static float     ENEMY_SHOOT_FREQUENCY = 1.5f;
+    public static float     ENERGY_BAR_FILL = 0.25f;
+    public static float     FIRE_BALL_SPEED_TIME = 0.0005f;
     public static int       COUNTDOWN = 3;
-    public static float     ENERGY_BAR_FILL = 0.5f;
+    
+    public static System.Random RANDOM = new System.Random();
+
+    #endregion
+
     #region Camera
     public static float     CAMERA_FOV = 24f;
     public static float     DEFAULT_FOV = 40f;
@@ -21,19 +27,18 @@ public static class Helpers
     #region ScorePoints
     public static int       PERFECT_SHOOT_SCORE = 3;
     public static int       REGULAR_SHOOT_SCORE = 2;
-    public static GameDifficulty DIFFICULTY = GameDifficulty.Normal;
+    public static           GameDifficulty DIFFICULTY = GameDifficulty.Normal;
     #endregion
 
+    #region ENVIRONMENT
     public static Vector3   HOOP_POSITION = new Vector3(0.27f, 7.62f, 5.92f);
     public static Vector3   BOARD_HIT_POSITION = new Vector3(0.43f, 10f, 6.207f);
-    //public static Vector3   BOARD_HIT_POSITION = new Vector3(0.43f, 10f, 5.88f);
     public static Vector3   MISS_BOARD_HIT_POSITION = new Vector3(3.43f, 10f, 6.35f);
     public static Vector3   LOW_THROW_POSITION = new Vector3(0.43f, 0f, 2.35f);
     public static Vector3   HIGH_THROW_POSITION = new Vector3(0f, 0f, 20);
+    public static float     THROW_HEIGHT = 15f;
 
-
-    public static float THROW_HEIGHT = 15f;
-    public static System.Random RANDOM = new System.Random();
+    #endregion
 
     #region TAGS
     public enum GameTag
@@ -48,20 +53,7 @@ public static class Helpers
     public static string StringTag(GameTag t) => t.ToString();
 
     #endregion
-    public static int GetScore(ShootType shootType, bool isBoardSparking)
-    {
-        switch (shootType)
-        {
-            case ShootType.PerfectShoot:
-                return 3;
-            case ShootType.RegularShoot:
-                return 2;
-            case ShootType.BoardShoot:
-                return isBoardSparking ? GetRandomNumber(4,5) : REGULAR_SHOOT_SCORE;
-            default:
-                return 0;
-        }
-    }
+    
     #region SHOOT PARAMETERS
     
     public static float START_RANGE_PERFECT_SHOOT;
@@ -138,9 +130,22 @@ public static class Helpers
         BlueBall
     }
 
-    public static int GetRandomNumber(int min, int max) => RANDOM.Next(min, max + 1);
-    public static float GetFloatRandomNumber(int min, int max) => GetRandomNumber(min * 10, max * 10) / 10;
+    public static int GetScore(ShootType shootType, bool isBoardSparking)
+    {
+        switch (shootType)
+        {
+            case ShootType.PerfectShoot:
+                return 3;
+            case ShootType.RegularShoot:
+                return 2;
+            case ShootType.BoardShoot:
+                return isBoardSparking ? GetRandomNumber(4, 5) : REGULAR_SHOOT_SCORE;
+            default:
+                return 0;
+        }
+    }
 
+    
     public static Vector3 GetFinalPosition(ShootType shootType, float value)
     {
         switch (shootType)
@@ -160,8 +165,11 @@ public static class Helpers
             default:
                 return Vector3.zero;
         }
-        #endregion
     }
+    #endregion
+
+    public static int GetRandomNumber(int min, int max) => RANDOM.Next(min, max + 1);
+    public static float GetFloatRandomNumber(int min, int max) => GetRandomNumber(min * 10, max * 10) / 10;
 
     public static bool IsPlayerBallOfType(BallType balltype) => GameManager.Instance.Data.PlayerBall.BallType == balltype;
 

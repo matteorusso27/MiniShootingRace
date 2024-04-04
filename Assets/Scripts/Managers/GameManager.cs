@@ -305,7 +305,7 @@ public class GameManager : Singleton<GameManager>
         var time = 0f;
         while (CanvasManager.Instance.GetEnergyBarFill() > 0)
         {
-            time += Time.deltaTime * 0.0005f; //todo I don't like this value
+            time += Time.deltaTime * FIRE_BALL_SPEED_TIME;
             CanvasManager.Instance.SetGameEnergyBar(CanvasManager.Instance.GetEnergyBarFill() - time);
             yield return null;
         }
