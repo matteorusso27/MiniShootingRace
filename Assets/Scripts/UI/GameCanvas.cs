@@ -19,7 +19,6 @@ public class GameCanvas : MonoBehaviour
     public TMP_Text         CountDown;
     public GameObject       FireballTxt;
     public GameObject       BoardTxt;
-    public Button           RestartBtn;
 
     public float PerfectRangeHeight => PerfectRange.rectTransform.rect.height;
     public float BoardRangeHeight => BoardRange.rectTransform.rect.height;
@@ -29,7 +28,6 @@ public class GameCanvas : MonoBehaviour
     private void Start()
     {
         ChangeFireBallTxt(false);
-        RestartBtn.onClick.AddListener(delegate () { GameM.OnRestartingGame(); });
     }
     public void SetTime(int t)
     {

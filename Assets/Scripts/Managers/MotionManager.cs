@@ -10,13 +10,12 @@ public class MotionManager : Singleton<MotionManager>
     public QuadraticCurve  EnemyCurve;
     public float           CurrentPlayerTime;
     public float           CurrentTimeEnemy;
-    public float           Speed = 1f; // todo needed?
 
     public bool            IsPlayerBallInMotion;
     public bool            IsEnemyBallInMotion;
     public                 GameObject[] Balls;
    
-    public void Setup(Vector3 startingPoint, Vector3 finalPoint, bool isPlayerBall)
+    public void Init(Vector3 startingPoint, Vector3 finalPoint, bool isPlayerBall)
     {
         Balls = InstanceM.GetBalls().Select(x=> x.gameObject).ToArray();
 
@@ -48,16 +47,16 @@ public class MotionManager : Singleton<MotionManager>
         {
             IsEnemyBallInMotion = true;
         }
-        var d = Vector3.Distance(curve.StartingPoint, curve.FinalPoint);
+        var distance = Vector3.Distance(curve.StartingPoint, curve.FinalPoint);
         var time = IsPlayerBall ? CurrentPlayerTime : CurrentTimeEnemy;
         var cameraFOV = CameraM.Camera.m_Lens.FieldOfView;
-        while ( d >= 0.5f)
+        while ( distance >= 0.5f)
         {
             time += Time.deltaTime;
             ball.position = curve.Evaluate(time);
             ball.forward  = curve.Evaluate(time + 0.001f) - ball.position;
 
-            d = Vector3.Distance(ball.transform.position, curve.FinalPoint);
+            distance = Vector3.Distance(ball.transform.position, curve.FinalPoint);
 
             if (IsPlayerBall)
             {

@@ -139,6 +139,7 @@ public static class Helpers
     }
 
     public static int GetRandomNumber(int min, int max) => RANDOM.Next(min, max + 1);
+    public static float GetFloatRandomNumber(int min, int max) => GetRandomNumber(min * 10, max * 10) / 10;
 
     public static Vector3 GetFinalPosition(ShootType shootType, float value)
     {

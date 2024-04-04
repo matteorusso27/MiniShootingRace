@@ -37,17 +37,16 @@ public class SwipeManager : Singleton<SwipeManager>
 
         screenHeight = Screen.height;
         maxSwipeDistance = screenHeight / 2;
-        //todo add minswipedistance
         ChangeSwipeState(SwipeState.WaitForSwipeDetection);
     }
 
     public bool CanMeasureSwipe => State == SwipeState.SwipeDetection && GameM.Data.IsBallReady;
     public bool SwipeIsMeasured => State == SwipeState.SwipeMeasured;
 
-    public void Setup()
+    public void Init()
     {
         normalizedDistance = 0f;
-        CanvasM.Canvas.SetFillBar(normalizedDistance);
+        CanvasM.GameCanvas.SetFillBar(normalizedDistance);
         ChangeSwipeState(SwipeState.SwipeDetection);
     }
     private void OnSwipe(string swipe)
@@ -104,9 +103,9 @@ public class SwipeManager : Singleton<SwipeManager>
     private void UpdateUI()
     {
         // Update UI with swipe distance
-        CanvasM.Canvas.SetFillBar(normalizedDistance);
-        var markerPositionY = CanvasM.Canvas.FillBarHeight * normalizedDistance;
-        CanvasM.Canvas.FillMarker.rectTransform.anchoredPosition = new Vector3(0, markerPositionY, 0);
+        CanvasM.GameCanvas.SetFillBar(normalizedDistance);
+        var markerPositionY = CanvasM.GameCanvas.FillBarHeight * normalizedDistance;
+        CanvasM.GameCanvas.FillMarker.rectTransform.anchoredPosition = new Vector3(0, markerPositionY, 0);
     }
 
     private void OnDisable()
@@ -129,6 +128,6 @@ public class SwipeManager : Singleton<SwipeManager>
     {
         // Wait to allow swipe measurement again
         yield return new WaitForSeconds(1f);
-        Setup();
+        Init();
     }
 }

@@ -11,10 +11,7 @@ public class InstanceManager : Singleton<InstanceManager>
     public List<GameObject> SceneObjects;
     public GameObject       FireVFX;
     public GameObject       BoardVFX;
-    public void Start()
-    {
-        SceneObjects = new List<GameObject>();
-    }
+    public void Start() => SceneObjects = new List<GameObject>();
 
     public BallBase[] GetBalls()
     {
@@ -42,6 +39,7 @@ public class InstanceManager : Singleton<InstanceManager>
         SceneObjects.Add(toSpawn.gameObject);
     }
 
+    //Todo add player to animate
     private void SpawnPlayer(EntityType player)
     {
         var characterPosition = new Vector3(1, 3, 0);
