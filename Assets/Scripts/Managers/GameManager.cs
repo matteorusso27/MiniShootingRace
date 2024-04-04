@@ -26,7 +26,6 @@ public class GameManager : Singleton<GameManager>
         
         public bool IsBoardSparking;
         public bool IsBallReady;
-        public bool IsRestarting;
         
         public BallBase PlayerBall;
         public BallBase EnemyBall;
@@ -126,10 +125,7 @@ public class GameManager : Singleton<GameManager>
 
     private void HandleSpawningPlayer()
     {
-        if (!Data.IsRestarting)
-        {
-            InstanceM.SpawnPlayerAndBalls();
-        }
+        InstanceM.SpawnPlayerAndBalls();
         Init();
 
         ChangeState(GameState.PlayerTurn);
@@ -233,7 +229,6 @@ public class GameManager : Singleton<GameManager>
         else if (Data.PlayerScore > Data.EnemyScore) result = ResultGame.Won;
         else result = ResultGame.Tie;
 
-        Data.IsRestarting = true;
         CanvasM.Canvas.gameObject.SetActive(false);
         CanvasM.RewardCanvas.Setup(result);
     }
