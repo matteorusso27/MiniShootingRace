@@ -89,7 +89,7 @@ public static class Helpers
 
     public static ShootType GetRandomShootType()
     {
-        var failedShootMaxRange = DIFFICULTY == GameDifficulty.Normal ? 6 : 4;
+        var failedShootMaxRange = DIFFICULTY == GameDifficulty.Normal ? 8 : 6;
         var rnd = GetRandomNumber(0, 10);
         if (rnd < failedShootMaxRange)
             return ShootType.FailedShoot;
